@@ -157,3 +157,41 @@ export function formatTimezone(timezone: string): string {
     return timezone
   }
 }
+
+/**
+ * 港口模糊搜索（用于自动补全）
+ * 
+ * 支持按港口代码、英文名称、中文名称进行模糊匹配
+ * - 不区分大小写
+ * - 使用包含匹配（contains）
+ * - 最多返回指定数量的结果
+ * 
+ * @param query 搜索关键词
+ * @param ports 港口数据列表
+ * @param maxResults 最大返回结果数，默认10
+ * @returns Port[] 匹配的港口列表
+ */
+export function fuzzySearchPorts(
+  query: string, 
+  ports: Port[], 
+  maxResults: number = 10
+): Port[] {
+  if (!query || query.trim() === '') {
+    return []
+  }
+  
+  const lowerQuery = query.toLowerCase().trim()
+  
+  const results = ports.filter(port => 
+    // 匹配港口代码
+    port.code.toLowerCase().includes(lowerQuery) ||
+    // 匹配英文名称
+    port.name.toLowerCase().includes(lowerQuery) ||
+    // 匹配中文名称
+    port.nameCN.includes(query.trim())
+  )
+  
+  // 限制返回结果数量
+  return results.slice(0, maxResults)
+}
+

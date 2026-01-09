@@ -198,5 +198,37 @@
     "country": "Australia",
     "countryCode": "AU",
     "timezone": "Australia/Sydney"
+  },
+  {
+    "code": "CNXMN",
+    "name": "Xiamen",
+    "nameCN": "厦门",
+    "country": "China",
+    "countryCode": "CN",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "code": "VNSGN",
+    "name": "Ho Chi Minh City",
+    "nameCN": "胡志明市",
+    "country": "Vietnam",
+    "countryCode": "VN",
+    "timezone": "Asia/Ho_Chi_Minh"
+  },
+  {
+    "code": "MYPKG",
+    "name": "Port Klang",
+    "nameCN": "巴生港",
+    "country": "Malaysia",
+    "countryCode": "MY",
+    "timezone": "Asia/Kuala_Lumpur"
+  },
+  {
+    "code": "LKCMB",
+    "name": "Colombo",
+    "nameCN": "科伦坡",
+    "country": "Sri Lanka",
+    "countryCode": "LK",
+    "timezone": "Asia/Colombo"
   }
 ]

@@ -1,0 +1,271 @@
+<script setup lang="ts">
+/**
+ * 船期列表组件
+ * 
+ * 功能分支: 002-shipping-schedule
+ * 展示船期数据列表
+ */
+import type { ScheduleDisplayItem } from '@/types/schedule'
+
+const props = defineProps<{
+  schedules: ScheduleDisplayItem[]
+  selectedId?: string
+  loading?: boolean
+}>()
+
+const emit = defineEmits<{
+  select: [item: ScheduleDisplayItem]
+}>()
+
+function handleSelect(item: ScheduleDisplayItem) {
+  emit('select', item)
+}
+
+/**
+ * 获取港口显示名称
+ * 如果港口信息存在则显示中文名，否则显示代码
+ */
+function getPortDisplayName(item: ScheduleDisplayItem, type: 'departure' | 'arrival'): string {
+  if (type === 'departure') {
+    return item.departurePortInfo?.nameCN || item.schedule.departurePort
+  }
+  return item.arrivalPortInfo?.nameCN || item.schedule.arrivalPort
+}
+
+/**
+ * 获取港口代码
+ */
+function getPortCode(item: ScheduleDisplayItem, type: 'departure' | 'arrival'): string {
+  return type === 'departure' ? item.schedule.departurePort : item.schedule.arrivalPort
+}
+</script>
+
+<template>
+  <div class="schedule-list" role="list">
+    <!-- 加载状态 -->
+    <div v-if="loading" class="loading-state">
+      <span class="loading-spinner"></span>
+      加载中...
+    </div>
+
+    <!-- 空状态 -->
+    <div v-else-if="schedules.length === 0" class="empty-state">
+      暂无船期数据
+    </div>
+
+    <!-- 船期列表 -->
+    <div
+      v-else
+      v-for="item in schedules"
+      :key="item.schedule.id"
+      class="schedule-item"
+      :class="{ selected: selectedId === item.schedule.id }"
+      role="listitem"
+      @click="handleSelect(item)"
+    >
+      <!-- 起运港 -->
+      <div class="port-info departure">
+        <span class="port-label">起运港</span>
+        <span class="port-name">{{ getPortDisplayName(item, 'departure') }}</span>
+        <span class="port-code">{{ getPortCode(item, 'departure') }}</span>
+      </div>
+
+      <!-- 航向箭头和运输耗时 -->
+      <div class="route-info">
+        <span class="route-arrow">→</span>
+        <span class="transit-days">{{ item.transitDaysFormatted }}</span>
+      </div>
+
+      <!-- 目的港 -->
+      <div class="port-info arrival">
+        <span class="port-label">目的港</span>
+        <span class="port-name">{{ getPortDisplayName(item, 'arrival') }}</span>
+        <span class="port-code">{{ getPortCode(item, 'arrival') }}</span>
+      </div>
+
+      <!-- ETD日期 -->
+      <div class="etd-info">
+        <span class="etd-label">ETD</span>
+        <span class="etd-date">{{ item.etdFormatted }}</span>
+      </div>
+
+      <!-- 承运公司 -->
+      <div class="carrier-info">
+        <span class="carrier-label">承运公司</span>
+        <span class="carrier-name">{{ item.carrierName }}</span>
+      </div>
+
+      <!-- 船舶信息（可选） -->
+      <div v-if="item.schedule.vesselName" class="vessel-info">
+        <span class="vessel-name">{{ item.schedule.vesselName }}</span>
+        <span v-if="item.schedule.voyageNumber" class="voyage-number">{{ item.schedule.voyageNumber }}</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.schedule-list {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.loading-state,
+.empty-state {
+  padding: 40px;
+  text-align: center;
+  color: #888;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: 2px solid #ddd;
+  border-top-color: #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.schedule-item {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.schedule-item:last-child {
+  border-bottom: none;
+}
+
+.schedule-item:hover {
+  background-color: #f5f5f5;
+}
+
+.schedule-item.selected {
+  background-color: #e3f2fd;
+  border-left: 3px solid #1976d2;
+}
+
+.port-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.port-label {
+  font-size: 12px;
+  color: #999;
+}
+
+.port-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.port-code {
+  font-size: 13px;
+  color: #666;
+  font-family: 'Consolas', 'Monaco', monospace;
+}
+
+.route-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 60px;
+}
+
+.route-arrow {
+  font-size: 20px;
+  color: #999;
+}
+
+.transit-days {
+  font-size: 13px;
+  color: #666;
+  background-color: #f0f0f0;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.etd-info,
+.carrier-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 100px;
+}
+
+.etd-label,
+.carrier-label {
+  font-size: 12px;
+  color: #999;
+}
+
+.etd-date {
+  font-size: 14px;
+  color: #333;
+}
+
+.carrier-name {
+  font-size: 14px;
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.vessel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+}
+
+.vessel-name {
+  font-size: 14px;
+  color: #333;
+}
+
+.voyage-number {
+  font-size: 12px;
+  color: #666;
+}
+
+/* 响应式布局 */
+@media (max-width: 992px) {
+  .schedule-item {
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto auto;
+  }
+
+  .etd-info,
+  .carrier-info,
+  .vessel-info {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 576px) {
+  .schedule-item {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .route-info {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+</style>

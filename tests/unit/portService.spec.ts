@@ -13,7 +13,8 @@ import {
   normalizePortCode,
   searchByName,
   search,
-  formatTimezone
+  formatTimezone,
+  fuzzySearchPorts
 } from '@/services/portService'
 import type { Port } from '@/types/port'
 
@@ -208,6 +209,66 @@ describe('portService', () => {
     it('应正确格式化美洲时区', () => {
       const result = formatTimezone('America/New_York')
       expect(result).toMatch(/GMT|UTC|America\/New_York/)
+    })
+  })
+
+  // T008: fuzzySearchPorts 单元测试（自动补全用）
+  describe('fuzzySearchPorts', () => {
+    let ports: Port[]
+
+    beforeEach(async () => {
+      ports = await loadPorts()
+    })
+
+    it('应按港口代码模糊匹配', () => {
+      const results = fuzzySearchPorts('SHA', ports)
+      expect(results.length).toBeGreaterThan(0)
+      expect(results.some(p => p.code === 'CNSHA')).toBe(true)
+    })
+
+    it('应按英文名称模糊匹配', () => {
+      const results = fuzzySearchPorts('shang', ports)
+      expect(results.length).toBeGreaterThan(0)
+      expect(results.some(p => p.name === 'Shanghai')).toBe(true)
+    })
+
+    it('应按中文名称模糊匹配', () => {
+      const results = fuzzySearchPorts('上海', ports)
+      expect(results.length).toBeGreaterThan(0)
+      expect(results.some(p => p.nameCN === '上海')).toBe(true)
+    })
+
+    it('应支持大小写不敏感匹配', () => {
+      const results = fuzzySearchPorts('SHANGHAI', ports)
+      expect(results.length).toBeGreaterThan(0)
+      expect(results.some(p => p.name === 'Shanghai')).toBe(true)
+    })
+
+    it('应限制返回结果数量（默认10个）', () => {
+      // 搜索一个常见字母，可能返回多个结果
+      const results = fuzzySearchPorts('a', ports)
+      expect(results.length).toBeLessThanOrEqual(10)
+    })
+
+    it('应支持自定义最大结果数', () => {
+      const results = fuzzySearchPorts('a', ports, 5)
+      expect(results.length).toBeLessThanOrEqual(5)
+    })
+
+    it('应返回空数组当输入为空时', () => {
+      const results = fuzzySearchPorts('', ports)
+      expect(results).toEqual([])
+    })
+
+    it('应返回空数组当无匹配结果时', () => {
+      const results = fuzzySearchPorts('不存在的港口名称xyz123', ports)
+      expect(results).toEqual([])
+    })
+
+    it('应同时匹配代码、英文名和中文名', () => {
+      // 搜索 "sing" 应匹配 Singapore
+      const results = fuzzySearchPorts('sing', ports)
+      expect(results.some(p => p.name === 'Singapore')).toBe(true)
     })
   })
 })
