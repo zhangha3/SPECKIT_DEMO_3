@@ -1,0 +1,202 @@
+[
+  {
+    "code": "CNSHA",
+    "name": "Shanghai",
+    "nameCN": "上海",
+    "country": "China",
+    "countryCode": "CN",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "code": "CNNGB",
+    "name": "Ningbo",
+    "nameCN": "宁波",
+    "country": "China",
+    "countryCode": "CN",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "code": "CNTAO",
+    "name": "Qingdao",
+    "nameCN": "青岛",
+    "country": "China",
+    "countryCode": "CN",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "code": "CNSZX",
+    "name": "Shenzhen",
+    "nameCN": "深圳",
+    "country": "China",
+    "countryCode": "CN",
+    "timezone": "Asia/Shanghai"
+  },
+  {
+    "code": "HKHKG",
+    "name": "Hong Kong",
+    "nameCN": "香港",
+    "country": "Hong Kong",
+    "countryCode": "HK",
+    "timezone": "Asia/Hong_Kong"
+  },
+  {
+    "code": "SGSIN",
+    "name": "Singapore",
+    "nameCN": "新加坡",
+    "country": "Singapore",
+    "countryCode": "SG",
+    "timezone": "Asia/Singapore"
+  },
+  {
+    "code": "KRPUS",
+    "name": "Busan",
+    "nameCN": "釜山",
+    "country": "South Korea",
+    "countryCode": "KR",
+    "timezone": "Asia/Seoul"
+  },
+  {
+    "code": "JPTYO",
+    "name": "Tokyo",
+    "nameCN": "东京",
+    "country": "Japan",
+    "countryCode": "JP",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "code": "JPYOK",
+    "name": "Yokohama",
+    "nameCN": "横滨",
+    "country": "Japan",
+    "countryCode": "JP",
+    "timezone": "Asia/Tokyo"
+  },
+  {
+    "code": "TWKHH",
+    "name": "Kaohsiung",
+    "nameCN": "高雄",
+    "country": "Taiwan",
+    "countryCode": "TW",
+    "timezone": "Asia/Taipei"
+  },
+  {
+    "code": "NLRTM",
+    "name": "Rotterdam",
+    "nameCN": "鹿特丹",
+    "country": "Netherlands",
+    "countryCode": "NL",
+    "timezone": "Europe/Amsterdam"
+  },
+  {
+    "code": "DEHAM",
+    "name": "Hamburg",
+    "nameCN": "汉堡",
+    "country": "Germany",
+    "countryCode": "DE",
+    "timezone": "Europe/Berlin"
+  },
+  {
+    "code": "BEANR",
+    "name": "Antwerp",
+    "nameCN": "安特卫普",
+    "country": "Belgium",
+    "countryCode": "BE",
+    "timezone": "Europe/Brussels"
+  },
+  {
+    "code": "GBFXT",
+    "name": "Felixstowe",
+    "nameCN": "费利克斯托",
+    "country": "United Kingdom",
+    "countryCode": "GB",
+    "timezone": "Europe/London"
+  },
+  {
+    "code": "ESVLC",
+    "name": "Valencia",
+    "nameCN": "瓦伦西亚",
+    "country": "Spain",
+    "countryCode": "ES",
+    "timezone": "Europe/Madrid"
+  },
+  {
+    "code": "USLAX",
+    "name": "Los Angeles",
+    "nameCN": "洛杉矶",
+    "country": "United States",
+    "countryCode": "US",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "code": "USLGB",
+    "name": "Long Beach",
+    "nameCN": "长滩",
+    "country": "United States",
+    "countryCode": "US",
+    "timezone": "America/Los_Angeles"
+  },
+  {
+    "code": "USNYC",
+    "name": "New York",
+    "nameCN": "纽约",
+    "country": "United States",
+    "countryCode": "US",
+    "timezone": "America/New_York"
+  },
+  {
+    "code": "USSAV",
+    "name": "Savannah",
+    "nameCN": "萨凡纳",
+    "country": "United States",
+    "countryCode": "US",
+    "timezone": "America/New_York"
+  },
+  {
+    "code": "BRSSZ",
+    "name": "Santos",
+    "nameCN": "桑托斯",
+    "country": "Brazil",
+    "countryCode": "BR",
+    "timezone": "America/Sao_Paulo"
+  },
+  {
+    "code": "AEJEA",
+    "name": "Jebel Ali",
+    "nameCN": "杰贝阿里",
+    "country": "United Arab Emirates",
+    "countryCode": "AE",
+    "timezone": "Asia/Dubai"
+  },
+  {
+    "code": "EGPSD",
+    "name": "Port Said",
+    "nameCN": "塞得港",
+    "country": "Egypt",
+    "countryCode": "EG",
+    "timezone": "Africa/Cairo"
+  },
+  {
+    "code": "ZADUR",
+    "name": "Durban",
+    "nameCN": "德班",
+    "country": "South Africa",
+    "countryCode": "ZA",
+    "timezone": "Africa/Johannesburg"
+  },
+  {
+    "code": "AUBNE",
+    "name": "Brisbane",
+    "nameCN": "布里斯班",
+    "country": "Australia",
+    "countryCode": "AU",
+    "timezone": "Australia/Brisbane"
+  },
+  {
+    "code": "AUSYD",
+    "name": "Sydney",
+    "nameCN": "悉尼",
+    "country": "Australia",
+    "countryCode": "AU",
+    "timezone": "Australia/Sydney"
+  }
+]
