@@ -17,11 +17,11 @@
 
 **Purpose**: 创建新文件结构和基础配置
 
-- [ ] T001 创建用户类型定义 in src/types/user.ts
-- [ ] T002 [P] 创建订单类型定义 in src/types/order.ts
-- [ ] T003 [P] 创建用户静态数据文件 in src/assets/data/users.json
-- [ ] T004 [P] 更新船期类型定义添加 stock 字段 in src/types/schedule.ts
-- [ ] T005 更新船期静态数据添加 stock 字段 in src/assets/data/schedules.json
+- [X] T001 创建用户类型定义 in src/types/user.ts
+- [X] T002 [P] 创建订单类型定义 in src/types/order.ts
+- [X] T003 [P] 创建用户静态数据文件 in src/assets/data/users.json
+- [X] T004 [P] 更新船期类型定义添加 stock 字段 in src/types/schedule.ts
+- [X] T005 更新船期静态数据添加 stock 字段 in src/assets/data/schedules.json
 
 ---
 
@@ -31,10 +31,10 @@
 
 **⚠️ CRITICAL**: 必须完成此阶段才能开始用户故事实现
 
-- [ ] T006 实现用户服务 userService in src/services/userService.ts
-- [ ] T007 [P] 实现用户服务单元测试 in tests/unit/userService.spec.ts
-- [ ] T008 实现认证 composable useAuth in src/composables/useAuth.ts
-- [ ] T009 [P] 实现 useAuth 单元测试 in tests/unit/useAuth.spec.ts
+- [X] T006 实现用户服务 userService in src/services/userService.ts
+- [X] T007 [P] 实现用户服务单元测试 in tests/unit/userService.spec.ts
+- [X] T008 实现认证 composable useAuth in src/composables/useAuth.ts
+- [X] T009 [P] 实现 useAuth 单元测试 in tests/unit/useAuth.spec.ts
 
 **Checkpoint**: 基础设施就绪，用户故事实现可以开始
 
@@ -48,10 +48,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] 创建登录表单组件 LoginForm.vue in src/components/LoginForm.vue
-- [ ] T011 [P] [US1] 创建 LoginForm 组件测试 in tests/components/LoginForm.spec.ts
-- [ ] T012 [US1] 创建登录页面视图 LoginView.vue in src/views/LoginView.vue
-- [ ] T013 [US1] 修改 App.vue 添加登录状态检查和路由守卫 in src/App.vue
+- [X] T010 [US1] 创建登录表单组件 LoginForm.vue in src/components/LoginForm.vue
+- [X] T011 [P] [US1] 创建 LoginForm 组件测试 in tests/components/LoginForm.spec.ts
+- [X] T012 [US1] 创建登录页面视图 LoginView.vue in src/views/LoginView.vue
+- [X] T013 [US1] 修改 App.vue 添加登录状态检查和路由守卫 in src/App.vue
 
 **Checkpoint**: User Story 1 完成 - 用户可以登录系统
 
@@ -65,9 +65,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T014 [US2] 创建用户头部组件 UserHeader.vue（含用户名和登出按钮） in src/components/UserHeader.vue
-- [ ] T015 [P] [US2] 创建 UserHeader 组件测试 in tests/components/UserHeader.spec.ts
-- [ ] T016 [US2] 在 App.vue 中集成 UserHeader 组件 in src/App.vue
+- [X] T014 [US2] 创建用户头部组件 UserHeader.vue（含用户名和登出按钮） in src/components/UserHeader.vue
+- [X] T015 [P] [US2] 创建 UserHeader 组件测试 in tests/components/UserHeader.spec.ts
+- [X] T016 [US2] 在 App.vue 中集成 UserHeader 组件 in src/App.vue
 
 **Checkpoint**: User Story 2 完成 - 用户可以登录和登出
 
@@ -81,10 +81,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T017 [US3] 扩展 scheduleService 支持库存管理（加载、保存、扣减库存） in src/services/scheduleService.ts
-- [ ] T018 [P] [US3] 更新 scheduleService 单元测试 in tests/unit/scheduleService.spec.ts
-- [ ] T019 [US3] 修改 ScheduleList.vue 添加库存展示和购买按钮 in src/components/ScheduleList.vue
-- [ ] T020 [P] [US3] 更新 ScheduleList 组件测试 in tests/components/ScheduleList.spec.ts
+- [X] T017 [US3] 扩展 scheduleService 支持库存管理（加载、保存、扣减库存） in src/services/scheduleService.ts
+- [X] T018 [P] [US3] 更新 scheduleService 单元测试 in tests/unit/scheduleService.spec.ts
+- [X] T019 [US3] 修改 ScheduleList.vue 添加库存展示和购买按钮 in src/components/ScheduleList.vue
+- [X] T020 [P] [US3] 更新 ScheduleList 组件测试 in tests/components/ScheduleList.spec.ts
 
 **Checkpoint**: User Story 3 完成 - 用户可以查看库存状态
 
@@ -98,11 +98,11 @@
 
 ### Implementation for User Story 4
 
-- [ ] T021 [US4] 实现订单服务 orderService in src/services/orderService.ts
-- [ ] T022 [P] [US4] 创建 orderService 单元测试 in tests/unit/orderService.spec.ts
-- [ ] T023 [US4] 创建购买确认弹窗组件 PurchaseDialog.vue in src/components/PurchaseDialog.vue
-- [ ] T024 [P] [US4] 创建 PurchaseDialog 组件测试 in tests/components/PurchaseDialog.spec.ts
-- [ ] T025 [US4] 在 ScheduleList.vue 中集成购买流程（弹窗触发、确认购买、成功提示） in src/components/ScheduleList.vue
+- [X] T021 [US4] 实现订单服务 orderService in src/services/orderService.ts
+- [X] T022 [P] [US4] 创建 orderService 单元测试 in tests/unit/orderService.spec.ts
+- [X] T023 [US4] 创建购买确认弹窗组件 PurchaseDialog.vue in src/components/PurchaseDialog.vue
+- [X] T024 [P] [US4] 创建 PurchaseDialog 组件测试 in tests/components/PurchaseDialog.spec.ts
+- [X] T025 [US4] 在 ScheduleList.vue 中集成购买流程（弹窗触发、确认购买、成功提示） in src/components/ScheduleList.vue
 
 **Checkpoint**: User Story 4 完成 - 用户可以完成完整的购买流程（MVP核心功能）
 
@@ -116,10 +116,10 @@
 
 ### Implementation for User Story 5
 
-- [ ] T026 [US5] 实现订单查询 composable useOrderSearch in src/composables/useOrderSearch.ts
-- [ ] T027 [P] [US5] 创建 useOrderSearch 单元测试 in tests/unit/useOrderSearch.spec.ts
-- [ ] T028 [US5] 创建订单搜索组件 OrderSearch.vue in src/components/OrderSearch.vue
-- [ ] T029 [P] [US5] 创建 OrderSearch 组件测试 in tests/components/OrderSearch.spec.ts
+- [X] T026 [US5] 实现订单查询 composable useOrderSearch in src/composables/useOrderSearch.ts
+- [X] T027 [P] [US5] 创建 useOrderSearch 单元测试 in tests/unit/useOrderSearch.spec.ts
+- [X] T028 [US5] 创建订单搜索组件 OrderSearch.vue in src/components/OrderSearch.vue
+- [X] T029 [P] [US5] 创建 OrderSearch 组件测试 in tests/components/OrderSearch.spec.ts
 
 **Checkpoint**: User Story 5 完成 - 用户可以按订单号查询订单
 
@@ -133,10 +133,10 @@
 
 ### Implementation for User Story 6
 
-- [ ] T030 [US6] 创建订单列表组件 OrderList.vue（含分页） in src/components/OrderList.vue
-- [ ] T031 [P] [US6] 创建 OrderList 组件测试 in tests/components/OrderList.spec.ts
-- [ ] T032 [US6] 创建订单查询页面视图 OrderQueryView.vue in src/views/OrderQueryView.vue
-- [ ] T033 [US6] 在 App.vue 导航栏添加"我的订单"菜单项 in src/App.vue
+- [X] T030 [US6] 创建订单列表组件 OrderList.vue（含分页） in src/components/OrderList.vue
+- [X] T031 [P] [US6] 创建 OrderList 组件测试 in tests/components/OrderList.spec.ts
+- [X] T032 [US6] 创建订单查询页面视图 OrderQueryView.vue in src/views/OrderQueryView.vue
+- [X] T033 [US6] 在 App.vue 导航栏添加"我的订单"菜单项 in src/App.vue
 
 **Checkpoint**: User Story 6 完成 - 用户可以查看订单列表和订单详情
 
@@ -146,9 +146,9 @@
 
 **Purpose**: 完善和优化
 
-- [ ] T034 [P] 代码审查和重构
-- [ ] T035 [P] 运行完整测试套件验证所有功能
-- [ ] T036 运行 quickstart.md 验证完整流程
+- [X] T034 [P] 代码审查和重构
+- [X] T035 [P] 运行完整测试套件验证所有功能
+- [X] T036 运行 quickstart.md 验证完整流程
 
 ---
 

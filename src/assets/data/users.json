@@ -1,0 +1,32 @@
+[
+  {
+    "username": "zhangsan",
+    "password": "123456",
+    "email": "zhangsan@example.com",
+    "country": "中国"
+  },
+  {
+    "username": "john",
+    "password": "123456",
+    "email": "john@example.com",
+    "country": "美国"
+  },
+  {
+    "username": "hans",
+    "password": "123456",
+    "email": "hans@example.com",
+    "country": "德国"
+  },
+  {
+    "username": "lim",
+    "password": "123456",
+    "email": "lim@example.com",
+    "country": "新加坡"
+  },
+  {
+    "username": "tanaka",
+    "password": "123456",
+    "email": "tanaka@example.com",
+    "country": "日本"
+  }
+]

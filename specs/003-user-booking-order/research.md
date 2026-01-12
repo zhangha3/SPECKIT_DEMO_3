@@ -278,3 +278,24 @@ async function purchaseSchedule(scheduleId: string, userId: string): Promise<Pur
 ## 遗留问题
 
 无。所有技术问题已澄清。
+
+## 补充说明 (2026年1月12日)
+
+### 动态组件 key 属性
+
+**问题**: 在使用 `<component :is="currentComponent" />` 进行页面切换时，如果从订单详情页返回列表页后再切换到其他功能页面，会出现 `Cannot read properties of null (reading 'subTree')` 错误。
+
+**根因分析**: Vue 动态组件在没有 `key` 属性时，可能会错误地复用组件实例，导致组件卸载后仍被访问。
+
+**解决方案**: 为动态组件添加 `key` 属性，确保组件切换时正确销毁和重建：
+
+```vue
+<!-- 修复前 -->
+<component :is="currentComponent" />
+
+<!-- 修复后 -->
+<component :is="currentComponent" :key="currentPageKey" />
+```
+
+**备选方案**: 如未来项目复杂度增加，可考虑引入 Vue Router 进行正式路由管理。
+

@@ -2,8 +2,9 @@
 /**
  * 船期列表组件
  * 
- * 功能分支: 002-shipping-schedule
+ * 功能分支: 002-shipping-schedule, 003-user-booking-order
  * 展示船期数据列表
+ * 新增: 库存展示和购买按钮 (FR-009 ~ FR-011, FR-027)
  */
 import type { ScheduleDisplayItem } from '@/types/schedule'
 
@@ -11,14 +12,27 @@ const props = defineProps<{
   schedules: ScheduleDisplayItem[]
   selectedId?: string
   loading?: boolean
+  /** 是否显示购买相关功能 (003-user-booking-order) */
+  showPurchase?: boolean
 }>()
 
 const emit = defineEmits<{
   select: [item: ScheduleDisplayItem]
+  /** 购买按钮点击事件 (003-user-booking-order) */
+  purchase: [item: ScheduleDisplayItem]
 }>()
 
 function handleSelect(item: ScheduleDisplayItem) {
   emit('select', item)
+}
+
+/**
+ * 处理购买按钮点击
+ * FR-010: 当船期库存大于0时，该船期行必须显示"购买"按钮
+ */
+function handlePurchase(item: ScheduleDisplayItem, event: Event) {
+  event.stopPropagation() // 阻止触发 select 事件
+  emit('purchase', item)
 }
 
 /**
@@ -37,6 +51,22 @@ function getPortDisplayName(item: ScheduleDisplayItem, type: 'departure' | 'arri
  */
 function getPortCode(item: ScheduleDisplayItem, type: 'departure' | 'arrival'): string {
   return type === 'departure' ? item.schedule.departurePort : item.schedule.arrivalPort
+}
+
+/**
+ * 获取库存数量
+ * FR-027: 船期列表中库存数量必须以"库存: X"格式展示
+ */
+function getStockDisplay(item: ScheduleDisplayItem): string {
+  const stock = item.schedule.stock ?? 0
+  return `库存: ${stock}`
+}
+
+/**
+ * 判断是否有库存
+ */
+function hasStock(item: ScheduleDisplayItem): boolean {
+  return (item.schedule.stock ?? 0) > 0
 }
 </script>
 
@@ -100,6 +130,21 @@ function getPortCode(item: ScheduleDisplayItem, type: 'departure' | 'arrival'): 
         <span class="vessel-name">{{ item.schedule.vesselName }}</span>
         <span v-if="item.schedule.voyageNumber" class="voyage-number">{{ item.schedule.voyageNumber }}</span>
       </div>
+      
+      <!-- 库存和购买 (003-user-booking-order) -->
+      <div v-if="showPurchase" class="stock-info">
+        <span class="stock-label">{{ getStockDisplay(item) }}</span>
+        <!-- FR-010: 库存大于0时显示购买按钮 -->
+        <button
+          v-if="hasStock(item)"
+          class="purchase-button"
+          @click="handlePurchase(item, $event)"
+        >
+          购买
+        </button>
+        <!-- FR-011: 库存等于0时显示"暂无库存"文字 -->
+        <span v-else class="no-stock">暂无库存</span>
+      </div>
     </div>
   </div>
 </template>
@@ -135,7 +180,7 @@ function getPortCode(item: ScheduleDisplayItem, type: 'departure' | 'arrival'): 
 
 .schedule-item {
   display: grid;
-  grid-template-columns: 1fr auto 1fr auto auto auto;
+  grid-template-columns: 1fr auto 1fr auto auto auto auto;
   align-items: center;
   gap: 16px;
   padding: 16px 20px;
@@ -241,6 +286,42 @@ function getPortCode(item: ScheduleDisplayItem, type: 'departure' | 'arrival'): 
 .voyage-number {
   font-size: 12px;
   color: #666;
+}
+
+/* 库存和购买 (003-user-booking-order) */
+.stock-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 80px;
+}
+
+.stock-label {
+  font-size: 13px;
+  color: #666;
+}
+
+.purchase-button {
+  padding: 6px 16px;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.purchase-button:hover {
+  background-color: #43a047;
+}
+
+.no-stock {
+  font-size: 13px;
+  color: #999;
+  font-style: italic;
 }
 
 /* 响应式布局 */

@@ -51,6 +51,7 @@ const mockPorts = [
 // 模拟服务
 vi.mock('@/services/scheduleService', () => ({
   loadSchedules: vi.fn(() => Promise.resolve(mockSchedules)),
+  getSchedulesWithStock: vi.fn(() => mockSchedules),
   searchSchedules: vi.fn((criteria, schedules) => ({
     schedules: schedules,
     total: schedules.length,
@@ -78,12 +79,12 @@ describe('ScheduleQueryView', () => {
 
   describe('初始化和数据加载', () => {
     it('应在组件挂载时加载船期数据', async () => {
-      const { loadSchedules } = await import('@/services/scheduleService')
+      const { getSchedulesWithStock } = await import('@/services/scheduleService')
       
       mount(ScheduleQueryView)
       await flushPromises()
       
-      expect(loadSchedules).toHaveBeenCalled()
+      expect(getSchedulesWithStock).toHaveBeenCalled()
     })
 
     it('应在组件挂载时加载港口数据', async () => {
@@ -96,10 +97,10 @@ describe('ScheduleQueryView', () => {
     })
 
     it('应在加载中时显示加载状态', async () => {
-      // 模拟延迟加载（使用 Promise 保持 pending 状态）
-      let resolveLoading: (value: typeof mockSchedules) => void
-      const { loadSchedules } = await import('@/services/scheduleService')
-      vi.mocked(loadSchedules).mockImplementationOnce(() => 
+      // 模拟延迟加载（使用 Promise 保持 pending 状态）- loadPorts 是异步的
+      let resolveLoading: (value: typeof mockPorts) => void
+      const { loadPorts } = await import('@/services/portService')
+      vi.mocked(loadPorts).mockImplementationOnce(() => 
         new Promise(resolve => { resolveLoading = resolve })
       )
       
@@ -110,7 +111,7 @@ describe('ScheduleQueryView', () => {
       expect(wrapper.find('.loading-state').exists() || wrapper.text().includes('加载')).toBe(true)
       
       // 完成加载
-      resolveLoading!(mockSchedules)
+      resolveLoading!(mockPorts)
       await flushPromises()
     })
 
@@ -141,8 +142,8 @@ describe('ScheduleQueryView', () => {
         carrier: 'COSCO'
       }))
       
-      const { loadSchedules } = await import('@/services/scheduleService')
-      vi.mocked(loadSchedules).mockResolvedValueOnce(manySchedules)
+      const { getSchedulesWithStock } = await import('@/services/scheduleService')
+      vi.mocked(getSchedulesWithStock).mockReturnValueOnce(manySchedules)
       
       const wrapper = mount(ScheduleQueryView)
       await flushPromises()
@@ -153,8 +154,8 @@ describe('ScheduleQueryView', () => {
 
   describe('错误处理', () => {
     it('应在数据加载失败时显示错误信息', async () => {
-      const { loadSchedules } = await import('@/services/scheduleService')
-      vi.mocked(loadSchedules).mockRejectedValueOnce(new Error('加载失败'))
+      const { loadPorts } = await import('@/services/portService')
+      vi.mocked(loadPorts).mockRejectedValueOnce(new Error('加载失败'))
       
       const wrapper = mount(ScheduleQueryView)
       await flushPromises()
@@ -175,8 +176,8 @@ describe('ScheduleQueryView', () => {
         carrier: 'COSCO'
       }))
       
-      const { loadSchedules } = await import('@/services/scheduleService')
-      vi.mocked(loadSchedules).mockResolvedValueOnce(manySchedules)
+      const { getSchedulesWithStock } = await import('@/services/scheduleService')
+      vi.mocked(getSchedulesWithStock).mockReturnValueOnce(manySchedules)
       
       const wrapper = mount(ScheduleQueryView)
       await flushPromises()
@@ -195,8 +196,8 @@ describe('ScheduleQueryView', () => {
         carrier: 'COSCO'
       }))
       
-      const { loadSchedules } = await import('@/services/scheduleService')
-      vi.mocked(loadSchedules).mockResolvedValueOnce(manySchedules)
+      const { getSchedulesWithStock } = await import('@/services/scheduleService')
+      vi.mocked(getSchedulesWithStock).mockReturnValueOnce(manySchedules)
       
       const wrapper = mount(ScheduleQueryView)
       await flushPromises()

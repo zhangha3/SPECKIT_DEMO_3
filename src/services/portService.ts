@@ -85,6 +85,22 @@ export function findByCode(code: string, ports: Port[]): Port | null {
 }
 
 /**
+ * 按港口代码获取港口信息（同步版本，直接使用静态数据）
+ * 
+ * @param code 港口代码 (5位字母, 大小写不敏感)
+ * @returns Port | null 匹配的港口，未找到返回 null
+ */
+export function getPortByCode(code: string): Port | null {
+  if (!code || code.trim() === '') {
+    return null
+  }
+  
+  const normalizedCode = normalizePortCode(code.trim())
+  const ports = portsData as Port[]
+  return ports.find(port => port.code === normalizedCode) || null
+}
+
+/**
  * 按港口名称模糊查询
  * 
  * @param keyword 搜索关键词 (支持中英文)

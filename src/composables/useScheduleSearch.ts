@@ -12,7 +12,7 @@ import type {
   ScheduleDisplayItem 
 } from '@/types/schedule'
 import { 
-  loadSchedules, 
+  getSchedulesWithStock, 
   searchSchedules, 
   buildDisplayItem 
 } from '@/services/scheduleService'
@@ -43,14 +43,13 @@ export function useScheduleSearch() {
       isLoading.value = true
       error.value = null
       
-      // 并行加载船期和港口数据
-      const [schedulesData, portsData] = await Promise.all([
-        loadSchedules(),
-        loadPorts()
-      ])
-      
-      schedules.value = schedulesData
+      // 加载港口数据
+      const portsData = await loadPorts()
       ports.value = portsData
+      
+      // 从 localStorage 加载船期数据（包含实时库存）
+      const schedulesData = getSchedulesWithStock()
+      schedules.value = schedulesData
       
       // 初始显示所有船期
       filteredSchedules.value = schedulesData
@@ -64,7 +63,11 @@ export function useScheduleSearch() {
 
   // 执行搜索
   function performSearch() {
-    const result = searchSchedules(criteria.value, schedules.value)
+    // 重新从 localStorage 读取最新库存数据
+    const latestSchedules = getSchedulesWithStock()
+    schedules.value = latestSchedules
+    
+    const result = searchSchedules(criteria.value, latestSchedules)
     filteredSchedules.value = result.schedules
   }
 

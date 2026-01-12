@@ -1,7 +1,7 @@
 /**
  * ScheduleList 组件测试
  * 
- * 功能分支: 002-shipping-schedule
+ * 功能分支: 002-shipping-schedule, 003-user-booking-order
  * TDD: 先写测试，确保失败后再实现
  */
 import { describe, it, expect } from 'vitest'
@@ -288,6 +288,121 @@ describe('ScheduleList', () => {
       items.forEach(item => {
         expect(item.attributes('role')).toBe('listitem')
       })
+    })
+  })
+  
+  // ============================================================================
+  // 库存和购买测试 (003-user-booking-order)
+  // ============================================================================
+  
+  describe('库存展示 (003-user-booking-order)', () => {
+    // 带库存的测试数据
+    const schedulesWithStock: ScheduleDisplayItem[] = [
+      {
+        schedule: {
+          id: 'SCH-001',
+          departurePort: 'CNSHA',
+          arrivalPort: 'DEHAM',
+          etd: '2026-01-15',
+          transitDays: 28,
+          carrier: 'COSCO',
+          stock: 50
+        },
+        departurePortInfo: null,
+        arrivalPortInfo: null,
+        carrierName: '中远海运',
+        transitDaysFormatted: '28天',
+        etdFormatted: '2026年1月15日'
+      },
+      {
+        schedule: {
+          id: 'SCH-002',
+          departurePort: 'CNNGB',
+          arrivalPort: 'NLRTM',
+          etd: '2026-01-18',
+          transitDays: 25,
+          carrier: 'MAERSK',
+          stock: 0
+        },
+        departurePortInfo: null,
+        arrivalPortInfo: null,
+        carrierName: '马士基',
+        transitDaysFormatted: '25天',
+        etdFormatted: '2026年1月18日'
+      }
+    ]
+    
+    it('showPurchase=false 时不应显示库存信息', () => {
+      const wrapper = mount(ScheduleList, {
+        props: { schedules: schedulesWithStock, showPurchase: false }
+      })
+      
+      expect(wrapper.find('.stock-info').exists()).toBe(false)
+    })
+    
+    it('showPurchase=true 时应显示库存信息 (FR-009)', () => {
+      const wrapper = mount(ScheduleList, {
+        props: { schedules: schedulesWithStock, showPurchase: true }
+      })
+      
+      const stockInfos = wrapper.findAll('.stock-info')
+      expect(stockInfos.length).toBe(2)
+    })
+    
+    it('库存应以"库存: X"格式展示 (FR-027)', () => {
+      const wrapper = mount(ScheduleList, {
+        props: { schedules: schedulesWithStock, showPurchase: true }
+      })
+      
+      const stockLabels = wrapper.findAll('.stock-label')
+      expect(stockLabels[0].text()).toBe('库存: 50')
+      expect(stockLabels[1].text()).toBe('库存: 0')
+    })
+    
+    it('库存大于0时应显示购买按钮 (FR-010)', () => {
+      const wrapper = mount(ScheduleList, {
+        props: { schedules: schedulesWithStock, showPurchase: true }
+      })
+      
+      const items = wrapper.findAll('.schedule-item')
+      // 第一项有库存，应显示购买按钮
+      expect(items[0].find('.purchase-button').exists()).toBe(true)
+      expect(items[0].find('.no-stock').exists()).toBe(false)
+    })
+    
+    it('库存等于0时应显示"暂无库存" (FR-011)', () => {
+      const wrapper = mount(ScheduleList, {
+        props: { schedules: schedulesWithStock, showPurchase: true }
+      })
+      
+      const items = wrapper.findAll('.schedule-item')
+      // 第二项无库存，应显示"暂无库存"
+      expect(items[1].find('.purchase-button').exists()).toBe(false)
+      expect(items[1].find('.no-stock').exists()).toBe(true)
+      expect(items[1].find('.no-stock').text()).toBe('暂无库存')
+    })
+    
+    it('点击购买按钮应触发 purchase 事件', async () => {
+      const wrapper = mount(ScheduleList, {
+        props: { schedules: schedulesWithStock, showPurchase: true }
+      })
+      
+      await wrapper.find('.purchase-button').trigger('click')
+      
+      const emitted = wrapper.emitted('purchase')
+      expect(emitted).toBeTruthy()
+      expect(emitted![0][0]).toEqual(schedulesWithStock[0])
+    })
+    
+    it('点击购买按钮不应触发 select 事件', async () => {
+      const wrapper = mount(ScheduleList, {
+        props: { schedules: schedulesWithStock, showPurchase: true }
+      })
+      
+      await wrapper.find('.purchase-button').trigger('click')
+      
+      const selectEmitted = wrapper.emitted('select')
+      expect(selectEmitted).toBeFalsy()
     })
   })
 })

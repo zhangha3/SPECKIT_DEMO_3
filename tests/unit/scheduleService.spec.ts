@@ -1,7 +1,7 @@
 /**
  * 船期服务单元测试
  * 
- * 功能分支: 002-shipping-schedule
+ * 功能分支: 002-shipping-schedule, 003-user-booking-order
  * 测试 scheduleService.ts 中的所有函数
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
@@ -16,7 +16,13 @@ import {
   formatTransitDays,
   formatEtd,
   buildDisplayItem,
-  buildDisplayItems
+  buildDisplayItems,
+  // 003-user-booking-order 新增
+  getSchedulesWithStock,
+  saveSchedulesToStorage,
+  getStock,
+  decreaseStock,
+  getScheduleById
 } from '@/services/scheduleService'
 import type { ShippingSchedule, ScheduleSearchCriteria } from '@/types/schedule'
 import type { Port } from '@/types/port'
@@ -284,6 +290,131 @@ describe('scheduleService', () => {
       
       expect(result.length).toBe(mockSchedules.length)
       expect(result[0].schedule).toBe(mockSchedules[0])
+    })
+  })
+  
+  // ============================================================================
+  // 库存管理测试 (003-user-booking-order)
+  // ============================================================================
+  
+  describe('库存管理 (003-user-booking-order)', () => {
+    // Mock localStorage
+    const mockLocalStorage = (() => {
+      let store: Record<string, string> = {}
+      return {
+        getItem: vi.fn((key: string) => store[key] || null),
+        setItem: vi.fn((key: string, value: string) => { store[key] = value }),
+        removeItem: vi.fn((key: string) => { delete store[key] }),
+        clear: vi.fn(() => { store = {} })
+      }
+    })()
+    
+    beforeEach(() => {
+      mockLocalStorage.clear()
+      vi.clearAllMocks()
+      Object.defineProperty(window, 'localStorage', {
+        value: mockLocalStorage,
+        writable: true
+      })
+    })
+    
+    describe('getSchedulesWithStock', () => {
+      it('应该返回带库存的船期数据', () => {
+        const schedules = getSchedulesWithStock()
+        expect(Array.isArray(schedules)).toBe(true)
+        expect(schedules.length).toBeGreaterThan(0)
+        
+        // 每条船期应该有 stock 字段
+        schedules.forEach(s => {
+          expect(s.stock).toBeDefined()
+          expect(typeof s.stock).toBe('number')
+        })
+      })
+      
+      it('初始库存应该是 99 (FR-008)', () => {
+        const schedules = getSchedulesWithStock()
+        schedules.forEach(s => {
+          expect(s.stock).toBe(99)
+        })
+      })
+      
+      it('应该保存数据到 localStorage', () => {
+        getSchedulesWithStock()
+        expect(mockLocalStorage.setItem).toHaveBeenCalled()
+      })
+    })
+    
+    describe('getStock', () => {
+      it('应该返回指定船期的库存', () => {
+        const schedules = getSchedulesWithStock()
+        const firstSchedule = schedules[0]
+        
+        const stock = getStock(firstSchedule.id)
+        expect(stock).toBe(99)
+      })
+      
+      it('不存在的船期应该返回 0', () => {
+        const stock = getStock('non-existent-id')
+        expect(stock).toBe(0)
+      })
+    })
+    
+    describe('decreaseStock', () => {
+      it('应该成功扣减库存', () => {
+        const schedules = getSchedulesWithStock()
+        const firstSchedule = schedules[0]
+        
+        const result = decreaseStock(firstSchedule.id)
+        expect(result).toBe(true)
+        
+        const newStock = getStock(firstSchedule.id)
+        expect(newStock).toBe(98)
+      })
+      
+      it('应该扣减指定数量的库存', () => {
+        const schedules = getSchedulesWithStock()
+        const firstSchedule = schedules[0]
+        
+        const result = decreaseStock(firstSchedule.id, 5)
+        expect(result).toBe(true)
+        
+        const newStock = getStock(firstSchedule.id)
+        expect(newStock).toBe(94)
+      })
+      
+      it('库存不足时应该返回 false', () => {
+        const schedules = getSchedulesWithStock()
+        const firstSchedule = schedules[0]
+        
+        // 尝试扣减超过库存的数量
+        const result = decreaseStock(firstSchedule.id, 100)
+        expect(result).toBe(false)
+        
+        // 库存应该保持不变
+        const stock = getStock(firstSchedule.id)
+        expect(stock).toBe(99)
+      })
+      
+      it('不存在的船期应该返回 false', () => {
+        const result = decreaseStock('non-existent-id')
+        expect(result).toBe(false)
+      })
+    })
+    
+    describe('getScheduleById', () => {
+      it('应该返回指定船期', () => {
+        const schedules = getSchedulesWithStock()
+        const firstSchedule = schedules[0]
+        
+        const schedule = getScheduleById(firstSchedule.id)
+        expect(schedule).toBeDefined()
+        expect(schedule?.id).toBe(firstSchedule.id)
+      })
+      
+      it('不存在的船期应该返回 undefined', () => {
+        const schedule = getScheduleById('non-existent-id')
+        expect(schedule).toBeUndefined()
+      })
     })
   })
 })

@@ -1,7 +1,7 @@
 /**
  * 船期实体类型定义
  * 
- * 功能分支: 002-shipping-schedule
+ * 功能分支: 002-shipping-schedule, 003-user-booking-order
  * 来源: data-model.md, contracts/schedule-service.ts
  */
 
@@ -39,6 +39,9 @@ export interface ShippingSchedule {
   
   /** 航次号 (可选) */
   voyageNumber?: string
+  
+  /** 库存数量 (003-user-booking-order 新增) */
+  stock?: number
 }
 
 // ============================================================================

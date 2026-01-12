@@ -1,8 +1,10 @@
 /**
  * 船期数据服务
  * 
- * 功能分支: 002-shipping-schedule
+ * 功能分支: 002-shipping-schedule, 003-user-booking-order
  * 来源: contracts/schedule-service.ts
+ * 
+ * 新增: 库存管理功能 (FR-008 ~ FR-011, FR-018)
  */
 import type { Port } from '@/types/port'
 import type { 
@@ -13,6 +15,123 @@ import type {
 } from '@/types/schedule'
 import { CARRIERS } from '@/types/schedule'
 import schedulesData from '@/assets/data/schedules.json'
+
+// ============================================================================
+// 常量
+// ============================================================================
+
+/** localStorage 键名 */
+const SCHEDULES_STORAGE_KEY = 'schedules'
+
+/** 默认库存值 */
+const DEFAULT_STOCK = 99
+
+// ============================================================================
+// 库存管理 (003-user-booking-order)
+// ============================================================================
+
+/**
+ * 获取运行时船期数据（包含库存）
+ * 优先从 localStorage 读取，否则从静态数据初始化
+ * 
+ * @returns ShippingSchedule[] 船期数据（含库存）
+ */
+export function getSchedulesWithStock(): ShippingSchedule[] {
+  try {
+    const stored = localStorage.getItem(SCHEDULES_STORAGE_KEY)
+    if (stored) {
+      const data = JSON.parse(stored) as ShippingSchedule[]
+      if (Array.isArray(data) && data.length > 0) {
+        return data
+      }
+    }
+  } catch (error) {
+    console.error('读取库存数据失败:', error)
+  }
+  
+  // 初始化：从静态数据加载并确保每条记录有 stock 字段
+  const initialData = (schedulesData as ShippingSchedule[]).map(s => ({
+    ...s,
+    stock: s.stock ?? DEFAULT_STOCK
+  }))
+  
+  // 保存到 localStorage
+  saveSchedulesToStorage(initialData)
+  
+  return initialData
+}
+
+/**
+ * 保存船期数据到 localStorage
+ * 
+ * @param schedules 船期数据
+ */
+export function saveSchedulesToStorage(schedules: ShippingSchedule[]): void {
+  try {
+    localStorage.setItem(SCHEDULES_STORAGE_KEY, JSON.stringify(schedules))
+  } catch (error) {
+    console.error('保存库存数据失败:', error)
+  }
+}
+
+/**
+ * 获取指定船期的库存
+ * 
+ * @param scheduleId 船期编号
+ * @returns number 库存数量，未找到返回 0
+ */
+export function getStock(scheduleId: string): number {
+  const schedules = getSchedulesWithStock()
+  const schedule = schedules.find(s => s.id === scheduleId)
+  return schedule?.stock ?? 0
+}
+
+/**
+ * 扣减库存
+ * 
+ * @param scheduleId 船期编号
+ * @param amount 扣减数量（默认 1）
+ * @returns boolean 是否成功
+ */
+export function decreaseStock(scheduleId: string, amount: number = 1): boolean {
+  const schedules = getSchedulesWithStock()
+  const index = schedules.findIndex(s => s.id === scheduleId)
+  
+  if (index === -1) {
+    console.error('船期不存在:', scheduleId)
+    return false
+  }
+  
+  const schedule = schedules[index]
+  const currentStock = schedule.stock ?? 0
+  
+  if (currentStock < amount) {
+    console.error('库存不足:', scheduleId, '当前库存:', currentStock, '需要:', amount)
+    return false
+  }
+  
+  // 扣减库存
+  schedules[index] = {
+    ...schedule,
+    stock: currentStock - amount
+  }
+  
+  // 保存到 localStorage
+  saveSchedulesToStorage(schedules)
+  
+  return true
+}
+
+/**
+ * 根据ID获取船期（包含库存）
+ * 
+ * @param scheduleId 船期编号
+ * @returns ShippingSchedule | undefined 船期对象
+ */
+export function getScheduleById(scheduleId: string): ShippingSchedule | undefined {
+  const schedules = getSchedulesWithStock()
+  return schedules.find(s => s.id === scheduleId)
+}
 
 /**
  * 加载船期数据

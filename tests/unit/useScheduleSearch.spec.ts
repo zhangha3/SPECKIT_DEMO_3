@@ -48,6 +48,7 @@ const mockPorts = [
 // 模拟服务
 vi.mock('@/services/scheduleService', () => ({
   loadSchedules: vi.fn(() => Promise.resolve(mockSchedules)),
+  getSchedulesWithStock: vi.fn(() => mockSchedules),
   searchSchedules: vi.fn((criteria, schedules) => ({
     schedules: schedules.filter((s: any) => {
       if (criteria.departurePort && s.departurePort !== criteria.departurePort) return false
@@ -107,14 +108,14 @@ describe('useScheduleSearch', () => {
 
   describe('数据初始化', () => {
     it('应通过 initialize 加载船期和港口数据', async () => {
-      const { loadSchedules } = await import('@/services/scheduleService')
+      const { getSchedulesWithStock } = await import('@/services/scheduleService')
       const { loadPorts } = await import('@/services/portService')
       
       const { initialize, schedules } = useScheduleSearch()
       
       await initialize()
       
-      expect(loadSchedules).toHaveBeenCalled()
+      expect(getSchedulesWithStock).toHaveBeenCalled()
       expect(loadPorts).toHaveBeenCalled()
       expect(schedules.value.length).toBe(3)
     })
@@ -130,8 +131,8 @@ describe('useScheduleSearch', () => {
     })
 
     it('应在加载失败时设置错误信息', async () => {
-      const { loadSchedules } = await import('@/services/scheduleService')
-      vi.mocked(loadSchedules).mockRejectedValueOnce(new Error('加载失败'))
+      const { loadPorts } = await import('@/services/portService')
+      vi.mocked(loadPorts).mockRejectedValueOnce(new Error('加载失败'))
       
       const { initialize, error } = useScheduleSearch()
       

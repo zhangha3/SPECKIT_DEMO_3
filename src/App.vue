@@ -2,24 +2,33 @@
 /**
  * 应用根组件
  * 
- * 功能分支: 001-port-query, 002-shipping-schedule
+ * 功能分支: 001-port-query, 002-shipping-schedule, 003-user-booking-order
  * 使用动态组件实现页面切换（无 vue-router）
+ * 新增: 登录状态管理和认证守卫
  */
-import { ref, shallowRef, markRaw } from 'vue'
+import { ref, shallowRef, markRaw, onMounted } from 'vue'
 import PortQueryView from './views/PortQueryView.vue'
 import ScheduleQueryView from './views/ScheduleQueryView.vue'
+import OrderQueryView from './views/OrderQueryView.vue'
+import LoginView from './views/LoginView.vue'
+import UserHeader from './components/UserHeader.vue'
+import { useAuth } from '@/composables/useAuth'
+
+// 认证状态
+const { isLoggedIn, restoreSession } = useAuth()
 
 // 页面配置
 const pages = [
   { key: 'port', label: '港口查询', component: markRaw(PortQueryView) },
-  { key: 'schedule', label: '船期查询', component: markRaw(ScheduleQueryView) }
+  { key: 'schedule', label: '船期查询', component: markRaw(ScheduleQueryView) },
+  { key: 'order', label: '我的订单', component: markRaw(OrderQueryView) }
 ]
 
-// 当前页面
-const currentPageKey = ref('port')
+// 当前页面（登录成功后默认跳转到船期查询页面 FR-026）
+const currentPageKey = ref('schedule')
 
 // 当前组件
-const currentComponent = shallowRef(pages[0].component)
+const currentComponent = shallowRef(pages[1].component)
 
 function switchPage(key: string) {
   const page = pages.find(p => p.key === key)
@@ -28,28 +37,53 @@ function switchPage(key: string) {
     currentComponent.value = page.component
   }
 }
+
+/**
+ * 处理登录成功
+ * FR-026: 登录成功后，系统必须默认跳转到船期查询页面
+ */
+function handleLoginSuccess(_username: string) {
+  currentPageKey.value = 'schedule'
+  currentComponent.value = pages[1].component
+}
+
+// 应用启动时恢复会话
+onMounted(() => {
+  restoreSession()
+})
 </script>
 
 <template>
   <div id="app">
-    <!-- 导航栏 -->
-    <nav class="main-nav">
-      <div class="nav-brand">航运信息平台</div>
-      <ul class="nav-links">
-        <li 
-          v-for="page in pages" 
-          :key="page.key"
-          :class="{ active: currentPageKey === page.key }"
-        >
-          <button @click="switchPage(page.key)">{{ page.label }}</button>
-        </li>
-      </ul>
-    </nav>
+    <!-- 未登录时显示登录页面 (FR-005) -->
+    <LoginView 
+      v-if="!isLoggedIn" 
+      @login-success="handleLoginSuccess" 
+    />
+    
+    <!-- 已登录时显示主应用界面 -->
+    <template v-else>
+      <!-- 导航栏 -->
+      <nav class="main-nav">
+        <div class="nav-brand">航运信息平台</div>
+        <ul class="nav-links">
+          <li 
+            v-for="page in pages" 
+            :key="page.key"
+            :class="{ active: currentPageKey === page.key }"
+          >
+            <button @click="switchPage(page.key)">{{ page.label }}</button>
+          </li>
+        </ul>
+        <!-- 用户信息和登出按钮 (FR-003, FR-004) -->
+        <UserHeader />
+      </nav>
 
-    <!-- 页面内容 -->
-    <main class="main-container">
-      <component :is="currentComponent" />
-    </main>
+      <!-- 页面内容 -->
+      <main class="main-container">
+        <component :is="currentComponent" :key="currentPageKey" />
+      </main>
+    </template>
   </div>
 </template>
 
