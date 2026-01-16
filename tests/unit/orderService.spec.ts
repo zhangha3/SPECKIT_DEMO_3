@@ -77,7 +77,8 @@ describe('orderService', () => {
           etd: '2026-01-15',
           transitDays: 28,
           carrier: 'COSCO',
-          stock: 99
+          stock: 99,
+          price: 140
         }
       ]
       mockLocalStorage.setItem('schedules', JSON.stringify(schedulesData))
@@ -105,7 +106,8 @@ describe('orderService', () => {
           etd: '2026-01-15',
           transitDays: 28,
           carrier: 'COSCO',
-          stock: 0
+          stock: 0,
+          price: 140
         }
       ]
       mockLocalStorage.setItem('schedules', JSON.stringify(schedulesData))
@@ -125,7 +127,8 @@ describe('orderService', () => {
           etd: '2026-01-15',
           transitDays: 28,
           carrier: 'COSCO',
-          stock: 5
+          stock: 5,
+          price: 140
         }
       ]
       mockLocalStorage.setItem('schedules', JSON.stringify(schedulesData))
@@ -146,7 +149,8 @@ describe('orderService', () => {
           etd: '2026-01-15',
           transitDays: 28,
           carrier: 'COSCO',
-          stock: 99
+          stock: 99,
+          price: 140
         }
       ]
       mockLocalStorage.setItem('schedules', JSON.stringify(schedulesData))

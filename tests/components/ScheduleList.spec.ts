@@ -21,7 +21,8 @@ const mockSchedules: ScheduleDisplayItem[] = [
       transitDays: 28,
       carrier: 'COSCO',
       vesselName: 'COSCO Pride',
-      voyageNumber: 'V2601W'
+      voyageNumber: 'V2601W',
+      price: 140
     },
     departurePortInfo: {
       code: 'CNSHA',
@@ -50,7 +51,8 @@ const mockSchedules: ScheduleDisplayItem[] = [
       arrivalPort: 'NLRTM',
       etd: '2026-01-18',
       transitDays: 25,
-      carrier: 'MAERSK'
+      carrier: 'MAERSK',
+      price: 125
     },
     departurePortInfo: {
       code: 'CNNGB',
@@ -79,7 +81,8 @@ const mockSchedules: ScheduleDisplayItem[] = [
       arrivalPort: 'USLAX',
       etd: '2026-01-20',
       transitDays: 21,
-      carrier: 'MSC'
+      carrier: 'MSC',
+      price: 105
     },
     departurePortInfo: {
       code: 'SGSIN',
@@ -226,7 +229,8 @@ describe('ScheduleList', () => {
           arrivalPort: 'UNKN2',
           etd: '2026-01-01',
           transitDays: 10,
-          carrier: 'COSCO'
+          carrier: 'COSCO',
+          price: 50
         },
         departurePortInfo: null,
         arrivalPortInfo: null,
@@ -306,7 +310,8 @@ describe('ScheduleList', () => {
           etd: '2026-01-15',
           transitDays: 28,
           carrier: 'COSCO',
-          stock: 50
+          stock: 50,
+          price: 140
         },
         departurePortInfo: null,
         arrivalPortInfo: null,
@@ -322,7 +327,8 @@ describe('ScheduleList', () => {
           etd: '2026-01-18',
           transitDays: 25,
           carrier: 'MAERSK',
-          stock: 0
+          stock: 0,
+          price: 125
         },
         departurePortInfo: null,
         arrivalPortInfo: null,

@@ -40,11 +40,11 @@ describe('OrderSearch', () => {
   })
   
   describe('初始状态', () => {
-    it('初始时搜索按钮应该禁用', () => {
+    it('初始时搜索按钮应该启用（支持查询全部订单）', () => {
       const wrapper = mount(OrderSearch)
       
       const searchBtn = wrapper.find('.search-btn')
-      expect(searchBtn.attributes('disabled')).toBeDefined()
+      expect(searchBtn.attributes('disabled')).toBeUndefined()
     })
     
     it('应该支持初始订单号 prop', () => {
@@ -81,14 +81,14 @@ describe('OrderSearch', () => {
       expect(searchBtn.attributes('disabled')).toBeUndefined()
     })
     
-    it('只输入空格时搜索按钮应该禁用', async () => {
+    it('只输入空格时搜索按钮应该启用（支持查询全部订单）', async () => {
       const wrapper = mount(OrderSearch)
       
       const input = wrapper.find('.order-id-input')
       await input.setValue('   ')
       
       const searchBtn = wrapper.find('.search-btn')
-      expect(searchBtn.attributes('disabled')).toBeDefined()
+      expect(searchBtn.attributes('disabled')).toBeUndefined()
     })
   })
   

@@ -25,6 +25,12 @@ export interface User {
   
   /** 所在国家 */
   country: string
+  
+  /** 账户余额（CNY），默认为 0 (004-fund-stats-enhancement 新增) */
+  balance: number
+  
+  /** 资金密码，明文存储（仅演示用途）(004-fund-stats-enhancement 新增) */
+  fundPassword: string
 }
 
 /**

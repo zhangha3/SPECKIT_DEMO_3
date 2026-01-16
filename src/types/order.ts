@@ -56,6 +56,9 @@ export interface Order {
   
   /** 订单状态 */
   status: OrderStatus
+  
+  /** 订单金额（CNY）(004-fund-stats-enhancement 新增) */
+  amount: number
 }
 
 // ============================================================================

@@ -99,7 +99,9 @@ describe('userService', () => {
         username: 'test',
         password: 'secret',
         email: 'test@example.com',
-        country: '中国'
+        country: '中国',
+        balance: 0,
+        fundPassword: 'fund123'
       }
       
       const userInfo = toUserInfo(user)

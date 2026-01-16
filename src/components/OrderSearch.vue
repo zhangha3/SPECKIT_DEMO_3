@@ -36,14 +36,13 @@ const emit = defineEmits<Emits>()
 const orderId = ref(props.initialOrderId)
 
 // 计算属性
-const canSearch = computed(() => orderId.value.trim().length > 0)
-const isSearchDisabled = computed(() => !canSearch.value || props.loading)
+const isSearchDisabled = computed(() => props.loading)
 
 /**
  * 执行搜索
  */
 function handleSearch() {
-  if (!canSearch.value || props.loading) return
+  if (props.loading) return
   emit('search', orderId.value.trim())
 }
 
@@ -59,7 +58,7 @@ function handleReset() {
  * 处理键盘事件
  */
 function handleKeydown(event: KeyboardEvent) {
-  if (event.key === 'Enter' && canSearch.value && !props.loading) {
+  if (event.key === 'Enter' && !props.loading) {
     handleSearch()
   }
 }

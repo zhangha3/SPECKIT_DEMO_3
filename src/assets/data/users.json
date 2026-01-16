@@ -3,30 +3,40 @@
     "username": "zhangsan",
     "password": "123456",
     "email": "zhangsan@example.com",
-    "country": "中国"
+    "country": "中国",
+    "balance": 0,
+    "fundPassword": "fund123"
   },
   {
     "username": "john",
     "password": "123456",
     "email": "john@example.com",
-    "country": "美国"
+    "country": "美国",
+    "balance": 0,
+    "fundPassword": "fund123"
   },
   {
     "username": "hans",
     "password": "123456",
     "email": "hans@example.com",
-    "country": "德国"
+    "country": "德国",
+    "balance": 0,
+    "fundPassword": "fund123"
   },
   {
     "username": "lim",
     "password": "123456",
     "email": "lim@example.com",
-    "country": "新加坡"
+    "country": "新加坡",
+    "balance": 0,
+    "fundPassword": "fund123"
   },
   {
     "username": "tanaka",
     "password": "123456",
     "email": "tanaka@example.com",
-    "country": "日本"
+    "country": "日本",
+    "balance": 0,
+    "fundPassword": "fund123"
   }
 ]

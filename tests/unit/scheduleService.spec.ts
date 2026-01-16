@@ -37,7 +37,8 @@ const mockSchedules: ShippingSchedule[] = [
     transitDays: 28,
     carrier: 'COSCO',
     vesselName: 'Test Vessel 1',
-    voyageNumber: '001E'
+    voyageNumber: '001E',
+    price: 140
   },
   {
     id: 'SCH-20260118-001',
@@ -47,7 +48,8 @@ const mockSchedules: ShippingSchedule[] = [
     transitDays: 14,
     carrier: 'MAERSK',
     vesselName: 'Test Vessel 2',
-    voyageNumber: '002W'
+    voyageNumber: '002W',
+    price: 70
   },
   {
     id: 'SCH-20260120-001',
@@ -57,7 +59,8 @@ const mockSchedules: ShippingSchedule[] = [
     transitDays: 22,
     carrier: 'MSC',
     vesselName: 'Test Vessel 3',
-    voyageNumber: '003E'
+    voyageNumber: '003E',
+    price: 110
   },
   {
     id: 'SCH-20260110-001',
@@ -67,7 +70,8 @@ const mockSchedules: ShippingSchedule[] = [
     transitDays: 30,
     carrier: 'CMACGM',
     vesselName: 'Test Vessel 4',
-    voyageNumber: '004E'
+    voyageNumber: '004E',
+    price: 150
   }
 ]
 

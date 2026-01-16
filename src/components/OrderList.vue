@@ -159,6 +159,10 @@ function handleOrderClick(order: Order) {
             <span class="detail-label">转运天数</span>
             <span class="detail-value">{{ order.transitDays }}天</span>
           </div>
+          <div class="detail-item amount-item">
+            <span class="detail-label">订单金额</span>
+            <span class="detail-value amount-value">¥{{ (order.amount ?? 0).toFixed(2) }}</span>
+          </div>
         </div>
         
         <!-- 订单时间 -->
@@ -307,7 +311,7 @@ function handleOrderClick(order: Order) {
 /* 订单详情 */
 .order-details {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 12px;
   margin-bottom: 16px;
 }
@@ -316,6 +320,13 @@ function handleOrderClick(order: Order) {
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+.detail-item.amount-item {
+  background: linear-gradient(135deg, #fff7e6 0%, #ffe7ba 100%);
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin: -4px;
 }
 
 .detail-label {
@@ -327,6 +338,12 @@ function handleOrderClick(order: Order) {
   font-size: 14px;
   color: #333;
   font-weight: 500;
+}
+
+.detail-value.amount-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fa8c16;
 }
 
 /* 订单底部 */

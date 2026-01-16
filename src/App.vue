@@ -2,26 +2,32 @@
 /**
  * 应用根组件
  * 
- * 功能分支: 001-port-query, 002-shipping-schedule, 003-user-booking-order
+ * 功能分支: 001-port-query, 002-shipping-schedule, 003-user-booking-order, 004-fund-stats-enhancement
  * 使用动态组件实现页面切换（无 vue-router）
  * 新增: 登录状态管理和认证守卫
+ * 新增: 资金账户和统计分析页面 (004-fund-stats-enhancement)
  */
-import { ref, shallowRef, markRaw, onMounted } from 'vue'
+import { ref, shallowRef, markRaw, onMounted, computed } from 'vue'
 import PortQueryView from './views/PortQueryView.vue'
 import ScheduleQueryView from './views/ScheduleQueryView.vue'
 import OrderQueryView from './views/OrderQueryView.vue'
 import LoginView from './views/LoginView.vue'
 import UserHeader from './components/UserHeader.vue'
+import FundAccountView from './views/FundAccountView.vue'
+import StatisticsView from './views/StatisticsView.vue'
+import ToastNotification from './components/ToastNotification.vue'
 import { useAuth } from '@/composables/useAuth'
 
 // 认证状态
-const { isLoggedIn, restoreSession } = useAuth()
+const { isLoggedIn, restoreSession, currentUser } = useAuth()
 
 // 页面配置
 const pages = [
   { key: 'port', label: '港口查询', component: markRaw(PortQueryView) },
   { key: 'schedule', label: '船期查询', component: markRaw(ScheduleQueryView) },
-  { key: 'order', label: '我的订单', component: markRaw(OrderQueryView) }
+  { key: 'order', label: '我的订单', component: markRaw(OrderQueryView) },
+  { key: 'fund', label: '资金账户', component: markRaw(FundAccountView) },
+  { key: 'stats', label: '统计分析', component: markRaw(StatisticsView) }
 ]
 
 // 当前页面（登录成功后默认跳转到船期查询页面 FR-026）
@@ -29,6 +35,9 @@ const currentPageKey = ref('schedule')
 
 // 当前组件
 const currentComponent = shallowRef(pages[1].component)
+
+// 获取当前用户名
+const currentUsername = computed(() => currentUser.value?.username || '')
 
 function switchPage(key: string) {
   const page = pages.find(p => p.key === key)
@@ -81,8 +90,16 @@ onMounted(() => {
 
       <!-- 页面内容 -->
       <main class="main-container">
-        <component :is="currentComponent" :key="currentPageKey" />
+        <component 
+          :is="currentComponent" 
+          :key="currentPageKey" 
+          :username="currentUsername"
+          @navigate-to="switchPage"
+        />
       </main>
+      
+      <!-- Toast 通知 -->
+      <ToastNotification />
     </template>
   </div>
 </template>

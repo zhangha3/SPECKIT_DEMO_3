@@ -68,6 +68,15 @@ function getStockDisplay(item: ScheduleDisplayItem): string {
 function hasStock(item: ScheduleDisplayItem): boolean {
   return (item.schedule.stock ?? 0) > 0
 }
+
+/**
+ * 获取价格显示
+ * 004-fund-stats-enhancement: 显示船期价格
+ */
+function getPriceDisplay(item: ScheduleDisplayItem): string {
+  const price = item.schedule.price ?? 0
+  return `¥${price.toFixed(2)}`
+}
 </script>
 
 <template>
@@ -131,8 +140,9 @@ function hasStock(item: ScheduleDisplayItem): boolean {
         <span v-if="item.schedule.voyageNumber" class="voyage-number">{{ item.schedule.voyageNumber }}</span>
       </div>
       
-      <!-- 库存和购买 (003-user-booking-order) -->
+      <!-- 库存和购买 (003-user-booking-order, 004-fund-stats-enhancement) -->
       <div v-if="showPurchase" class="stock-info">
+        <span class="price-label">{{ getPriceDisplay(item) }}</span>
         <span class="stock-label">{{ getStockDisplay(item) }}</span>
         <!-- FR-010: 库存大于0时显示购买按钮 -->
         <button
@@ -288,13 +298,19 @@ function hasStock(item: ScheduleDisplayItem): boolean {
   color: #666;
 }
 
-/* 库存和购买 (003-user-booking-order) */
+/* 库存和购买 (003-user-booking-order, 004-fund-stats-enhancement) */
 .stock-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  min-width: 80px;
+  min-width: 100px;
+}
+
+.price-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #e53935;
 }
 
 .stock-label {

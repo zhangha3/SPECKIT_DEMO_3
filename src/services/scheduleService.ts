@@ -356,3 +356,37 @@ export function buildDisplayItems(
 ): ScheduleDisplayItem[] {
   return schedules.map(schedule => buildDisplayItem(schedule, ports))
 }
+
+// ============================================================================
+// 价格相关 (004-fund-stats-enhancement 新增)
+// ============================================================================
+
+/**
+ * 获取船期价格
+ * 
+ * @param scheduleId 船期编号
+ * @returns number 价格（CNY），未找到返回 0
+ */
+export function getSchedulePrice(scheduleId: string): number {
+  const schedule = getScheduleById(scheduleId)
+  if (!schedule) {
+    return 0
+  }
+  // 如果有 price 字段则使用，否则根据公式计算
+  return schedule.price ?? (schedule.transitDays * 5)
+}
+
+/**
+ * 获取船期列表（按成交量排序）
+ * 用于热门船期展示
+ * 
+ * @param limit 返回数量限制
+ * @returns ShippingSchedule[] 船期列表
+ */
+export function getTopSchedules(limit: number = 10): ShippingSchedule[] {
+  const schedules = getSchedulesWithStock()
+  // 按价格降序（高价值船期优先）
+  return [...schedules]
+    .sort((a, b) => (b.price ?? 0) - (a.price ?? 0))
+    .slice(0, limit)
+}

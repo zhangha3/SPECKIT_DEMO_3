@@ -18,7 +18,8 @@ const mockSchedules: ShippingSchedule[] = [
     arrivalPort: 'DEHAM',
     etd: '2026-01-15',
     transitDays: 28,
-    carrier: 'COSCO'
+    carrier: 'COSCO',
+    price: 140
   },
   {
     id: 'SCH-20260118-002',
@@ -26,7 +27,8 @@ const mockSchedules: ShippingSchedule[] = [
     arrivalPort: 'NLRTM',
     etd: '2026-01-18',
     transitDays: 25,
-    carrier: 'MAERSK'
+    carrier: 'MAERSK',
+    price: 125
   },
   {
     id: 'SCH-20260120-003',
@@ -34,7 +36,8 @@ const mockSchedules: ShippingSchedule[] = [
     arrivalPort: 'USLAX',
     etd: '2026-01-20',
     transitDays: 21,
-    carrier: 'MSC'
+    carrier: 'MSC',
+    price: 105
   }
 ]
 
@@ -139,7 +142,8 @@ describe('ScheduleQueryView', () => {
         arrivalPort: 'DEHAM',
         etd: '2026-01-15',
         transitDays: 28,
-        carrier: 'COSCO'
+        carrier: 'COSCO',
+        price: 140
       }))
       
       const { getSchedulesWithStock } = await import('@/services/scheduleService')
@@ -173,7 +177,8 @@ describe('ScheduleQueryView', () => {
         arrivalPort: 'DEHAM',
         etd: '2026-01-15',
         transitDays: 28,
-        carrier: 'COSCO'
+        carrier: 'COSCO',
+        price: 140
       }))
       
       const { getSchedulesWithStock } = await import('@/services/scheduleService')
@@ -193,7 +198,8 @@ describe('ScheduleQueryView', () => {
         arrivalPort: 'DEHAM',
         etd: '2026-01-15',
         transitDays: 28,
-        carrier: 'COSCO'
+        carrier: 'COSCO',
+        price: 140
       }))
       
       const { getSchedulesWithStock } = await import('@/services/scheduleService')

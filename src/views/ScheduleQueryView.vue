@@ -2,20 +2,34 @@
 /**
  * 船期查询主页面视图
  * 
- * 功能分支: 002-shipping-schedule, 003-user-booking-order
+ * 功能分支: 002-shipping-schedule, 003-user-booking-order, 004-fund-stats-enhancement
  * 集成船期搜索、列表和分页组件
  * 新增: 购买舱位功能 (FR-010 ~ FR-016)
+ * 新增: 购买扣款和余额检查 (004-fund-stats-enhancement)
  */
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import ScheduleSearch from '@/components/ScheduleSearch.vue'
 import ScheduleList from '@/components/ScheduleList.vue'
 import Pagination from '@/components/Pagination.vue'
 import PurchaseDialog from '@/components/PurchaseDialog.vue'
+import HotSchedulePanel from '@/components/HotSchedulePanel.vue'
 import { useScheduleSearch } from '@/composables/useScheduleSearch'
 import { usePagination } from '@/composables/usePagination'
 import { useAuth } from '@/composables/useAuth'
+import { useFund } from '@/composables/useFund'
 import { createOrder } from '@/services/orderService'
+import { purchase as fundPurchase } from '@/services/fundService'
+import { getSchedulePrice } from '@/services/scheduleService'
 import type { ScheduleDisplayItem } from '@/types/schedule'
+
+// ============================================================================
+// Emits
+// ============================================================================
+
+const emit = defineEmits<{
+  /** 请求跳转到资金账户页面 */
+  navigateTo: [page: string]
+}>()
 
 const { 
   displayItems, 
@@ -30,6 +44,20 @@ const {
 } = useScheduleSearch()
 
 const { isLoggedIn, currentUser } = useAuth()
+
+// 资金账户 - 获取用户余额
+const { balance, loadBalance } = useFund()
+
+// 当用户登录或变更时，加载余额
+watch(
+  () => currentUser.value?.username,
+  (username) => {
+    if (username) {
+      loadBalance(username)
+    }
+  },
+  { immediate: true }
+)
 
 // 分页
 const { 
@@ -59,6 +87,12 @@ const isPurchasing = ref(false)
 
 /** 购买成功提示 */
 const purchaseSuccess = ref<{ show: boolean; orderId: string }>({ show: false, orderId: '' })
+
+/** 预填的起始港（热门航线点击） */
+const prefillDeparturePort = ref('')
+
+/** 预填的目的港（热门航线点击） */
+const prefillArrivalPort = ref('')
 
 onMounted(() => {
   initialize()
@@ -97,7 +131,7 @@ function handlePurchase(item: ScheduleDisplayItem) {
 }
 
 /**
- * 确认购买 (FR-012, FR-016)
+ * 确认购买 (FR-012, FR-016, FR-024 扣款)
  */
 async function handleConfirmPurchase() {
   if (!selectedSchedule.value || !currentUser.value) return
@@ -105,23 +139,38 @@ async function handleConfirmPurchase() {
   isPurchasing.value = true
   
   try {
-    const result = createOrder(selectedSchedule.value.schedule.id, currentUser.value.username)
+    const scheduleId = selectedSchedule.value.schedule.id
+    const username = currentUser.value.username
+    const price = getSchedulePrice(scheduleId)
+    
+    // 先进行扣款操作 (FR-024)
+    const purchaseResult = fundPurchase(username, price, scheduleId, `购买船期舱位 ${scheduleId}`)
+    
+    if (!purchaseResult.success) {
+      // 扣款失败
+      alert(purchaseResult.error || '扣款失败，请确认余额充足')
+      return
+    }
+    
+    // 扣款成功后创建订单，关联交易ID
+    const result = createOrder(scheduleId, username)
     
     if (result.success) {
-      // 购买成功，显示成功提示 (FR-016)
+      // 购买成功，刷新余额，显示成功提示 (FR-016)
+      loadBalance(username)
       purchaseSuccess.value = { show: true, orderId: result.orderId! }
       showPurchaseDialog.value = false
       
       // 刷新列表以显示更新后的库存
       performSearch()
       
-      // 3秒后自动隐藏成功提示
+      // 5秒后自动隐藏成功提示
       setTimeout(() => {
         purchaseSuccess.value = { show: false, orderId: '' }
       }, 5000)
     } else {
-      // 购买失败，显示错误
-      alert(result.error || '购买失败，请重试')
+      // 订单创建失败，但扣款已完成，需要提示用户联系客服
+      alert(`订单创建失败: ${result.error || '请联系客服处理'}`)
     }
   } finally {
     isPurchasing.value = false
@@ -135,6 +184,32 @@ async function handleConfirmPurchase() {
 function handleCancelPurchase() {
   showPurchaseDialog.value = false
   selectedSchedule.value = null
+}
+
+/**
+ * 跳转到资金账户页面充值 (T040)
+ */
+function handleGoToRecharge() {
+  showPurchaseDialog.value = false
+  selectedSchedule.value = null
+  emit('navigateTo', 'fund')
+}
+
+/**
+ * 处理热门航线点击 (T058)
+ * 自动填充查询条件并执行搜索
+ */
+function handleHotRouteSelect(departurePort: string, arrivalPort: string) {
+  prefillDeparturePort.value = departurePort
+  prefillArrivalPort.value = arrivalPort
+  
+  // 更新搜索条件并执行搜索
+  criteria.value.departurePort = departurePort
+  criteria.value.arrivalPort = arrivalPort
+  criteria.value.etdStart = undefined
+  criteria.value.etdEnd = undefined
+  performSearch()
+  resetPage()
 }
 
 /**
@@ -152,84 +227,99 @@ function closePurchaseSuccess() {
       <p class="subtitle">查看航运船期信息，了解航线和预计发运时间</p>
     </header>
 
-    <main class="main-content">
-      <!-- 购买成功提示 (FR-016) -->
-      <div 
-        v-if="purchaseSuccess.show" 
-        class="purchase-success-toast"
-        role="alert"
-        aria-live="polite"
-      >
-        <span class="success-icon">✓</span>
-        <span class="success-message">
-          购买成功！订单号: <strong>{{ purchaseSuccess.orderId }}</strong>
-        </span>
-        <button 
-          class="close-btn"
-          type="button"
-          aria-label="关闭提示"
-          @click="closePurchaseSuccess"
-        >×</button>
-      </div>
+    <div class="content-layout">
+      <!-- 左侧主内容区 -->
+      <main class="main-content">
+        <!-- 购买成功提示 (FR-016) -->
+        <div 
+          v-if="purchaseSuccess.show" 
+          class="purchase-success-toast"
+          role="alert"
+          aria-live="polite"
+        >
+          <span class="success-icon">✓</span>
+          <span class="success-message">
+            购买成功！订单号: <strong>{{ purchaseSuccess.orderId }}</strong>
+          </span>
+          <button 
+            class="close-btn"
+            type="button"
+            aria-label="关闭提示"
+            @click="closePurchaseSuccess"
+          >×</button>
+        </div>
 
-      <!-- 搜索条件（带港口自动补全） -->
-      <ScheduleSearch 
-        :ports="ports"
-        @search="handleSearch"
-        @reset="handleReset"
-      />
+        <!-- 搜索条件（带港口自动补全） -->
+        <ScheduleSearch 
+          :ports="ports"
+          :initial-departure-port="prefillDeparturePort"
+          :initial-arrival-port="prefillArrivalPort"
+          @search="handleSearch"
+          @reset="handleReset"
+        />
 
-      <!-- 加载状态 -->
-      <div v-if="isLoading" class="loading-state">
-        <span class="spinner"></span>
-        正在加载数据...
-      </div>
+        <!-- 加载状态 -->
+        <div v-if="isLoading" class="loading-state">
+          <span class="spinner"></span>
+          正在加载数据...
+        </div>
 
-      <!-- 错误提示 -->
-      <div v-if="error" class="error-state">
-        {{ error }}
-      </div>
+        <!-- 错误提示 -->
+        <div v-if="error" class="error-state">
+          {{ error }}
+        </div>
 
-      <!-- 结果统计 -->
-      <div v-if="!isLoading && !error" class="result-stats">
-        共 <strong>{{ total }}</strong> 条船期
-      </div>
+        <!-- 结果统计 -->
+        <div v-if="!isLoading && !error" class="result-stats">
+          共 <strong>{{ total }}</strong> 条船期
+        </div>
 
-      <!-- 船期列表 (启用购买功能) -->
-      <ScheduleList 
-        v-if="!isLoading && !error"
-        :schedules="paginatedItems"
-        :loading="isLoading"
-        :show-purchase="isLoggedIn"
-        @select="handleSelectSchedule"
-        @purchase="handlePurchase"
-      />
+        <!-- 船期列表 (启用购买功能) -->
+        <ScheduleList 
+          v-if="!isLoading && !error"
+          :schedules="paginatedItems"
+          :loading="isLoading"
+          :show-purchase="isLoggedIn"
+          @select="handleSelectSchedule"
+          @purchase="handlePurchase"
+        />
 
-      <!-- 分页控件 -->
-      <Pagination 
-        v-if="needsPagination && !isLoading && !error"
-        :current-page="currentPage"
-        :total-pages="totalPages"
-        :total="total"
-        @prev="prevPage"
-        @next="nextPage"
-      />
-    </main>
+        <!-- 分页控件 -->
+        <Pagination 
+          v-if="needsPagination && !isLoading && !error"
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          :total="total"
+          @prev="prevPage"
+          @next="nextPage"
+        />
+      </main>
+
+      <!-- 右侧热门船期面板 (T057) -->
+      <aside class="sidebar">
+        <HotSchedulePanel 
+          @select-route="handleHotRouteSelect"
+        />
+      </aside>
+    </div>
 
     <!-- 购买确认弹窗 (FR-017) -->
     <PurchaseDialog
       :visible="showPurchaseDialog"
       :schedule="selectedSchedule"
       :loading="isPurchasing"
+      :username="currentUser?.username || ''"
+      :user-balance="balance"
       @confirm="handleConfirmPurchase"
       @cancel="handleCancelPurchase"
+      @go-to-recharge="handleGoToRecharge"
     />
   </div>
 </template>
 
 <style scoped>
 .schedule-query-view {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -250,10 +340,35 @@ function closePurchaseSuccess() {
   color: #666;
 }
 
+/* 内容布局 - 左右分栏 */
+.content-layout {
+  display: flex;
+  gap: 24px;
+}
+
 .main-content {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.sidebar {
+  width: 280px;
+  flex-shrink: 0;
+}
+
+/* 响应式布局 */
+@media (max-width: 1024px) {
+  .content-layout {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    order: -1; /* 在移动端时热门船期显示在上面 */
+  }
 }
 
 .loading-state {

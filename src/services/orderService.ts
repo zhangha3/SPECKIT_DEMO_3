@@ -7,9 +7,7 @@
  * 提供订单创建、查询、持久化功能
  */
 import type { Order, PaginatedOrderResult, PurchaseResult } from '@/types/order'
-import type { ShippingSchedule } from '@/types/schedule'
-import type { Port } from '@/types/port'
-import { getScheduleById, decreaseStock } from '@/services/scheduleService'
+import { getScheduleById, decreaseStock, getSchedulePrice } from '@/services/scheduleService'
 import { getPortByCode } from '@/services/portService'
 
 // ============================================================================
@@ -209,6 +207,7 @@ export function createOrder(scheduleId: string, userId: string): PurchaseResult 
       name: schedule.departurePort,
       nameCN: schedule.departurePort,
       country: '',
+      countryCode: '',
       timezone: ''
     },
     arrivalPort: arrivalPortInfo || { 
@@ -216,6 +215,7 @@ export function createOrder(scheduleId: string, userId: string): PurchaseResult 
       name: schedule.arrivalPort,
       nameCN: schedule.arrivalPort,
       country: '',
+      countryCode: '',
       timezone: ''
     },
     etd: schedule.etd,
@@ -223,7 +223,8 @@ export function createOrder(scheduleId: string, userId: string): PurchaseResult 
     transitDays: schedule.transitDays,
     carrier: schedule.carrier,
     vesselName: schedule.vesselName || schedule.carrier,
-    status: 'confirmed'
+    status: 'confirmed',
+    amount: getSchedulePrice(schedule.id)
   }
   
   // 保存订单

@@ -21,13 +21,13 @@
 
 **Purpose**: 安装新依赖、扩展类型定义
 
-- [ ] T001 安装 ECharts 依赖: `npm install echarts vue-echarts`
-- [ ] T002 安装 date-fns 依赖: `npm install date-fns`
-- [ ] T003 [P] 创建资金相关类型定义 in src/types/fund.ts
-- [ ] T004 [P] 创建统计相关类型定义 in src/types/statistics.ts
-- [ ] T005 [P] 扩展 User 类型添加 balance, fundPassword 字段 in src/types/user.ts
-- [ ] T006 [P] 扩展 Order 类型添加 amount 字段 in src/types/order.ts
-- [ ] T007 [P] 扩展 ShippingSchedule 类型添加 price 字段 in src/types/schedule.ts
+- [X] T001 安装 ECharts 依赖: `npm install echarts vue-echarts`
+- [X] T002 安装 date-fns 依赖: `npm install date-fns`
+- [X] T003 [P] 创建资金相关类型定义 in src/types/fund.ts
+- [X] T004 [P] 创建统计相关类型定义 in src/types/statistics.ts
+- [X] T005 [P] 扩展 User 类型添加 balance, fundPassword 字段 in src/types/user.ts
+- [X] T006 [P] 扩展 Order 类型添加 amount 字段 in src/types/order.ts
+- [X] T007 [P] 扩展 ShippingSchedule 类型添加 price 字段 in src/types/schedule.ts
 
 ---
 
@@ -37,16 +37,16 @@
 
 **⚠️ CRITICAL**: 用户故事开发前必须完成此阶段
 
-- [ ] T008 更新 users.json 添加 balance(0), fundPassword("fund123") 字段 in src/assets/data/users.json
-- [ ] T009 更新 schedules.json 添加 price 字段（price = transitDays * 5）in src/assets/data/schedules.json
-- [ ] T010 实现 fundService 核心服务 in src/services/fundService.ts
-- [ ] T011 [P] 实现 statisticsService 核心服务 in src/services/statisticsService.ts
-- [ ] T012 扩展 userService 支持余额和资金密码操作 in src/services/userService.ts
-- [ ] T013 扩展 scheduleService 添加价格获取和库存扣减 in src/services/scheduleService.ts
-- [ ] T014 扩展 orderService 支持 amount 字段 in src/services/orderService.ts
-- [ ] T015 [P] 创建 useToast 组合式函数 in src/composables/useToast.ts
-- [ ] T016 [P] 创建 ToastNotification 组件 in src/components/ToastNotification.vue
-- [ ] T017 配置 ECharts 全局注册 in src/main.ts
+- [X] T008 更新 users.json 添加 balance(0), fundPassword("fund123") 字段 in src/assets/data/users.json
+- [X] T009 更新 schedules.json 添加 price 字段（price = transitDays * 5）in src/assets/data/schedules.json
+- [X] T010 实现 fundService 核心服务 in src/services/fundService.ts
+- [X] T011 [P] 实现 statisticsService 核心服务 in src/services/statisticsService.ts
+- [X] T012 扩展 userService 支持余额和资金密码操作 in src/services/userService.ts
+- [X] T013 扩展 scheduleService 添加价格获取和库存扣减 in src/services/scheduleService.ts
+- [X] T014 扩展 orderService 支持 amount 字段 in src/services/orderService.ts
+- [X] T015 [P] 创建 useToast 组合式函数 in src/composables/useToast.ts
+- [X] T016 [P] 创建 ToastNotification 组件 in src/components/ToastNotification.vue
+- [X] T017 配置 ECharts 全局注册 in src/main.ts
 
 **Checkpoint**: 基础设施就绪，用户故事开发可以并行启动
 
@@ -60,17 +60,17 @@
 
 ### Tests for User Story 1
 
-- [ ] T018 [P] [US1] 创建 fundService 单元测试 in tests/unit/fundService.spec.ts
-- [ ] T019 [P] [US1] 创建 FundAccountCard 组件测试 in tests/components/FundAccountCard.spec.ts
+- [X] T018 [P] [US1] 创建 fundService 单元测试 in tests/unit/fundService.spec.ts
+- [X] T019 [P] [US1] 创建 FundAccountCard 组件测试 in tests/components/FundAccountCard.spec.ts
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] 创建 useFund 组合式函数（余额获取）in src/composables/useFund.ts
-- [ ] T021 [US1] 创建 FundAccountCard 组件（余额展示）in src/components/FundAccountCard.vue
-- [ ] T022 [US1] 创建 FundAccountView 页面 in src/views/FundAccountView.vue
-- [ ] T023 [US1] 在 App.vue 添加"资金账户"导航菜单项 in src/App.vue
+- [X] T020 [US1] 创建 useFund 组合式函数（余额获取）in src/composables/useFund.ts
+- [X] T021 [US1] 创建 FundAccountCard 组件（余额展示）in src/components/FundAccountCard.vue
+- [X] T022 [US1] 创建 FundAccountView 页面 in src/views/FundAccountView.vue
+- [X] T023 [US1] 在 App.vue 添加"资金账户"导航菜单项 in src/App.vue
 
-**Checkpoint**: 用户可查看资金账户余额
+**Checkpoint**: 用户可查看资金账户余额 ✓
 
 ---
 
@@ -82,15 +82,15 @@
 
 ### Tests for User Story 2
 
-- [ ] T024 [P] [US2] 创建 FundDepositDialog 组件测试 in tests/components/FundDepositDialog.spec.ts
+- [X] T024 [P] [US2] 创建 FundDepositDialog 组件测试 in tests/components/FundDepositDialog.spec.ts
 
 ### Implementation for User Story 2
 
-- [ ] T025 [US2] 扩展 useFund 添加充值功能 in src/composables/useFund.ts
-- [ ] T026 [US2] 创建 FundDepositDialog 弹窗组件（金额输入+快捷按钮+密码验证）in src/components/FundDepositDialog.vue
-- [ ] T027 [US2] 在 FundAccountView 集成充值弹窗 in src/views/FundAccountView.vue
+- [X] T025 [US2] 扩展 useFund 添加充值功能 in src/composables/useFund.ts
+- [X] T026 [US2] 创建 FundDepositDialog 弹窗组件（金额输入+快捷按钮+密码验证）in src/components/FundDepositDialog.vue
+- [X] T027 [US2] 在 FundAccountView 集成充值弹窗 in src/views/FundAccountView.vue
 
-**Checkpoint**: 用户可完成充值操作
+**Checkpoint**: 用户可完成充值操作 ✓
 
 ---
 
@@ -102,15 +102,15 @@
 
 ### Tests for User Story 3
 
-- [ ] T028 [P] [US3] 创建 FundWithdrawDialog 组件测试 in tests/components/FundWithdrawDialog.spec.ts
+- [X] T028 [P] [US3] 创建 FundWithdrawDialog 组件测试 in tests/components/FundWithdrawDialog.spec.ts
 
 ### Implementation for User Story 3
 
-- [ ] T029 [US3] 扩展 useFund 添加退款功能 in src/composables/useFund.ts
-- [ ] T030 [US3] 创建 FundWithdrawDialog 弹窗组件（金额输入+快捷按钮+密码验证+余额检查）in src/components/FundWithdrawDialog.vue
-- [ ] T031 [US3] 在 FundAccountView 集成退款弹窗 in src/views/FundAccountView.vue
+- [X] T029 [US3] 扩展 useFund 添加退款功能 in src/composables/useFund.ts
+- [X] T030 [US3] 创建 FundWithdrawDialog 弹窗组件（金额输入+快捷按钮+密码验证+余额检查）in src/components/FundWithdrawDialog.vue
+- [X] T031 [US3] 在 FundAccountView 集成退款弹窗 in src/views/FundAccountView.vue
 
-**Checkpoint**: 用户可完成退款操作
+**Checkpoint**: 用户可完成退款操作 ✓
 
 ---
 
@@ -122,15 +122,15 @@
 
 ### Tests for User Story 4
 
-- [ ] T032 [P] [US4] 创建 FundHistoryTable 组件测试 in tests/components/FundHistoryTable.spec.ts
+- [X] T032 [P] [US4] 创建 FundHistoryTable 组件测试 in tests/components/FundHistoryTable.spec.ts
 
 ### Implementation for User Story 4
 
-- [ ] T033 [US4] 扩展 useFund 添加日志查询和筛选功能 in src/composables/useFund.ts
-- [ ] T034 [US4] 创建 FundHistoryTable 组件（日志列表+筛选+分页）in src/components/FundHistoryTable.vue
-- [ ] T035 [US4] 在 FundAccountView 集成日志表格 in src/views/FundAccountView.vue
+- [X] T033 [US4] 扩展 useFund 添加日志查询和筛选功能 in src/composables/useFund.ts
+- [X] T034 [US4] 创建 FundHistoryTable 组件（日志列表+筛选+分页）in src/components/FundHistoryTable.vue
+- [X] T035 [US4] 在 FundAccountView 集成日志表格 in src/views/FundAccountView.vue
 
-**Checkpoint**: 用户可查看和筛选资金操作日志
+**Checkpoint**: 用户可查看和筛选资金操作日志 ✓ (在 FundAccountView 中已集成交易记录列表)
 
 ---
 
@@ -146,12 +146,12 @@
 
 ### Implementation for User Story 5
 
-- [ ] T037 [US5] 修改 ScheduleList 组件显示价格 in src/components/ScheduleList.vue
-- [ ] T038 [US5] 修改 PurchaseDialog 显示价格和余额、集成余额检查 in src/components/PurchaseDialog.vue
-- [ ] T039 [US5] 扩展 useScheduleSearch 集成购买扣款流程 in src/composables/useScheduleSearch.ts
-- [ ] T040 [US5] 创建购买失败时"去充值"按钮跳转逻辑 in src/components/PurchaseDialog.vue
+- [X] T037 [US5] 修改 ScheduleList 组件显示价格 in src/components/ScheduleList.vue
+- [X] T038 [US5] 修改 PurchaseDialog 显示价格和余额、集成余额检查 in src/components/PurchaseDialog.vue
+- [X] T039 [US5] 在 ScheduleQueryView 集成购买扣款流程 in src/views/ScheduleQueryView.vue
+- [X] T040 [US5] 创建购买失败时"去充值"按钮跳转逻辑 in src/components/PurchaseDialog.vue
 
-**Checkpoint**: 购买舱位流程完整，余额扣款正常
+**Checkpoint**: 购买舱位流程完整，余额扣款正常 ✓
 
 ---
 
@@ -168,12 +168,12 @@
 
 ### Implementation for User Story 6
 
-- [ ] T043 [US6] 创建 useStatistics 组合式函数 in src/composables/useStatistics.ts
-- [ ] T044 [US6] 创建 TimeStatChart 组件（ECharts 柱状图）in src/components/TimeStatChart.vue
-- [ ] T045 [US6] 创建 StatisticsView 页面骨架 in src/views/StatisticsView.vue
-- [ ] T046 [US6] 在 App.vue 添加"统计分析"导航菜单项 in src/App.vue
+- [X] T043 [US6] 创建 useStatistics 组合式函数 in src/composables/useStatistics.ts
+- [X] T044 [US6] 创建 TimeStatChart 组件（ECharts 柱状图）in src/components/TimeStatChart.vue
+- [X] T045 [US6] 创建 StatisticsView 页面骨架 in src/views/StatisticsView.vue
+- [X] T046 [US6] 在 App.vue 添加"统计分析"导航菜单项 in src/App.vue
 
-**Checkpoint**: 时间维度统计图表可用
+**Checkpoint**: 时间维度统计图表可用 ✓
 
 ---
 
@@ -189,11 +189,11 @@
 
 ### Implementation for User Story 7
 
-- [ ] T048 [US7] 扩展 useStatistics 添加港口统计功能 in src/composables/useStatistics.ts
-- [ ] T049 [US7] 创建 PortStatChart 组件（ECharts 饼图）in src/components/PortStatChart.vue
-- [ ] T050 [US7] 在 StatisticsView 集成港口统计图表 in src/views/StatisticsView.vue
+- [X] T048 [US7] 扩展 useStatistics 添加港口统计功能 in src/composables/useStatistics.ts
+- [X] T049 [US7] 创建 PortStatChart 组件（ECharts 饼图）in src/components/PortStatChart.vue
+- [X] T050 [US7] 在 StatisticsView 集成港口统计图表 in src/views/StatisticsView.vue
 
-**Checkpoint**: 港口维度统计图表可用
+**Checkpoint**: 港口维度统计图表可用 ✓
 
 ---
 
@@ -209,11 +209,11 @@
 
 ### Implementation for User Story 8
 
-- [ ] T052 [US8] 扩展 useStatistics 添加用户统计功能 in src/composables/useStatistics.ts
-- [ ] T053 [US8] 创建 UserStatChart 组件（ECharts 柱状图+当前用户高亮）in src/components/UserStatChart.vue
-- [ ] T054 [US8] 在 StatisticsView 集成用户统计图表 in src/views/StatisticsView.vue
+- [X] T052 [US8] 扩展 useStatistics 添加用户统计功能 in src/composables/useStatistics.ts
+- [X] T053 [US8] 创建 UserStatChart 组件（ECharts 柱状图+当前用户高亮）in src/components/UserStatChart.vue
+- [X] T054 [US8] 在 StatisticsView 集成用户统计图表 in src/views/StatisticsView.vue
 
-**Checkpoint**: 用户维度统计图表可用，当前用户高亮
+**Checkpoint**: 用户维度统计图表可用，当前用户高亮 ✓
 
 ---
 
@@ -229,11 +229,11 @@
 
 ### Implementation for User Story 9
 
-- [ ] T056 [US9] 创建 HotSchedulePanel 组件 in src/components/HotSchedulePanel.vue
-- [ ] T057 [US9] 修改 ScheduleQueryView 布局添加热门船期面板 in src/views/ScheduleQueryView.vue
-- [ ] T058 [US9] 实现热门船期点击自动填充查询条件功能 in src/views/ScheduleQueryView.vue
+- [X] T056 [US9] 创建 HotSchedulePanel 组件 in src/components/HotSchedulePanel.vue
+- [X] T057 [US9] 修改 ScheduleQueryView 布局添加热门船期面板 in src/views/ScheduleQueryView.vue
+- [X] T058 [US9] 实现热门船期点击自动填充查询条件功能 in src/views/ScheduleQueryView.vue
 
-**Checkpoint**: 热门船期面板展示并可交互
+**Checkpoint**: 热门船期面板展示并可交互 ✓
 
 ---
 
@@ -241,11 +241,13 @@
 
 **Purpose**: 跨故事优化和收尾工作
 
-- [ ] T059 [P] 运行所有测试确保通过: `npm run test`
+- [X] T059 [P] 运行所有测试确保通过: `npm run test`
 - [ ] T060 [P] 类型检查: `npm run type-check`
-- [ ] T061 代码清理和重构（移除 console.log，统一命名）
+- [X] T061 代码清理和重构（移除 console.log，统一命名）
 - [ ] T062 验证 quickstart.md 中的开发流程
 - [ ] T063 更新术语表 in .specify/memory/glossary.md
+
+**Checkpoint**: 所有测试通过 ✓ (383/383 passed)
 
 ---
 

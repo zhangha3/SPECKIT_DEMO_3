@@ -67,6 +67,12 @@ onMounted(() => {
  * 处理订单号搜索
  */
 function handleSearch(orderId: string) {
+  if (!orderId || !orderId.trim()) {
+    // 订单号为空时，查询所有订单
+    viewMode.value = 'list'
+    loadUserOrders()
+    return
+  }
   viewMode.value = 'search'
   searchByOrderId(orderId)
 }
@@ -224,6 +230,10 @@ function getStatusText(status: string): string {
               <div class="info-item">
                 <span class="info-label">订单状态</span>
                 <span class="info-value">{{ getStatusText(selectedOrder.status) }}</span>
+              </div>
+              <div class="info-item amount-item">
+                <span class="info-label">订单金额</span>
+                <span class="info-value amount-value">¥{{ (selectedOrder.amount ?? 0).toFixed(2) }}</span>
               </div>
             </div>
           </div>
@@ -466,6 +476,16 @@ function getStatusText(status: string): string {
   font-size: 15px;
   color: #333;
   font-weight: 500;
+}
+
+.amount-item {
+  grid-column: span 2;
+}
+
+.amount-value {
+  color: #e53935;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 /* 响应式 */

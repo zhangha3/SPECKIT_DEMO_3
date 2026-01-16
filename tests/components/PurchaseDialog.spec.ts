@@ -1,12 +1,27 @@
 /**
  * PurchaseDialog 组件测试
  * 
- * 功能分支: 003-user-booking-order
+ * 功能分支: 003-user-booking-order, 004-fund-stats-enhancement
  */
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
+import { ref } from 'vue'
 import PurchaseDialog from '@/components/PurchaseDialog.vue'
 import type { ScheduleDisplayItem } from '@/types/schedule'
+
+// Mock useFund composable
+vi.mock('@/composables/useFund', () => ({
+  useFund: () => ({
+    balance: ref(1000), // 充足的余额
+    balanceFormatted: ref('¥1000.00'),
+    isLoading: ref(false),
+    error: ref(null),
+    loadBalance: vi.fn(),
+    deposit: vi.fn(),
+    withdraw: vi.fn(),
+    getTransactions: vi.fn()
+  })
+}))
 
 // 模拟船期数据
 const mockSchedule: ScheduleDisplayItem = {
@@ -19,7 +34,8 @@ const mockSchedule: ScheduleDisplayItem = {
     carrier: 'COSCO',
     vesselName: 'COSCO Pride',
     voyageNumber: 'V2601W',
-    stock: 50
+    stock: 50,
+    price: 140
   },
   departurePortInfo: {
     code: 'CNSHA',

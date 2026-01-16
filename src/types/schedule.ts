@@ -42,6 +42,9 @@ export interface ShippingSchedule {
   
   /** 库存数量 (003-user-booking-order 新增) */
   stock?: number
+  
+  /** 舱位价格（CNY）(004-fund-stats-enhancement 新增) */
+  price: number
 }
 
 // ============================================================================
